@@ -1,13 +1,17 @@
 package com.crosstime.backend.mapper
 
+import org.mapstruct.factory.Mappers
 import spock.lang.Specification
+
+import com.crosstime.backend.model.User as UserModel
+import com.crosstime.backend.entity.User as UserEntity
 
 class UsersMapperTest extends Specification {
 
     private UsersMapper usersMapper
 
     def setup() {
-        usersMapper = new UsersMapperImpl()
+        usersMapper = Mappers.getMapper(UsersMapper.class)
     }
 
     def "should map a user entity to user model"() {

@@ -8,6 +8,6 @@ import java.util.*
 @Service
 class UsersServiceImpl : UsersService {
     override fun createUser(): User {
-        return User(id = UUID.randomUUID(), "Username", "email@email.com", "password")
+        return User(id = UUID.randomUUID(), "Username", "email@email.com")
     }
 }
