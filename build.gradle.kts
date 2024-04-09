@@ -50,6 +50,7 @@ dependencies {
     testImplementation("org.spockframework:spock-core:2.4-M4-groovy-4.0")
     testImplementation("org.spockframework:spock-spring:2.4-M4-groovy-4.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+    testImplementation("com.h2database:h2:2.2.224")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
 }
 
@@ -58,6 +59,7 @@ dependencyManagement {
         mavenBom("io.sentry:sentry-bom:${property("sentryVersion")}")
     }
 }
+
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
