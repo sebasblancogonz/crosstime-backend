@@ -1,4 +1,5 @@
 package com.crosstime.backend.mapper
 
-class UsersMapper {
+
+interface UsersMapper {
 }
