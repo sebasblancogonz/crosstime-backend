@@ -14,12 +14,13 @@ class UsersServiceImpl(
     val usersMapper: UsersMapper
 ) : UsersService {
 
-    override fun createUser(email: String, username: String): UUID {
+    override fun createUser(email: String, username: String): UUID? {
         val user = buildUser(email, username)
         val userEntity: UserEntity = usersMapper.mapToEntity(user)
+
         return usersRepository.save(userEntity).id
     }
 
-    private fun buildUser(email: String, username: String) = UserModel(id = UUID.randomUUID(), username, email)
+    private fun buildUser(email: String, username: String) = UserModel(username = username, email = email)
 
 }
