@@ -1,11 +1,14 @@
 package com.crosstime.backend.controller
 
+import com.crosstime.backend.model.User
 import com.crosstime.backend.request.UserRequest
+import com.crosstime.backend.response.UserResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
@@ -25,14 +28,40 @@ class UsersControllerTest extends Specification {
     @Autowired
     private ObjectMapper objectMapper
 
-    def "should return users"() {
+    def "should create a user"() {
         given: "A create user request"
         def userRequest = new UserRequest("username", "email")
-        expect: "Status is 200 and the response is the hardcoded user"
+        expect: "Status is 200 and the response is the user's generated ID"
         mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(userRequest)))
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
+    }
+
+    def "should retrieve a user given an ID"() {
+        given: "A created user"
+        def userRequest = new UserRequest("username", "email")
+        def createUserRequest = mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn()
+        when: "The get user by id endpoint is called"
+        def userResponse = objectMapper.readValue(createUserRequest.response.getContentAsString(), UserResponse.class)
+
+        expect: "The user previously stored is returned"
+        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users/{userId}", userResponse.userId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn()
+
+        def user = objectMapper.readValue(response.response.getContentAsString(), User.class)
+
+        and: "The information matches"
+        assert userRequest.email == user.email
+        assert userRequest.username == user.username
+        assert userResponse.userId == user.id
     }
 
 }
