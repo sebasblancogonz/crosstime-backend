@@ -6,7 +6,7 @@ import com.crosstime.backend.entity.User as UserEntity
 import com.crosstime.backend.repository.UsersRepository
 import com.crosstime.backend.service.UsersService
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.UUID
 
 @Service
 class UsersServiceImpl(
