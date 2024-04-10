@@ -11,15 +11,12 @@ import static org.mockito.Mockito.mockStatic
 
 class UsersServiceImplTest extends Specification {
 
-    private static MockedStatic<UUID> mockUuid
     private static final UUID constUuid = UUID.randomUUID()
     private UsersMapper usersMapper = Mock(UsersMapper.class)
     private UsersRepository usersRepository = Mock(UsersRepository.class)
     private UsersServiceImpl usersService
 
     def setup() {
-        mockUuid = mockStatic(UUID.class)
-        mockUuid.when(UUID::randomUUID).thenReturn(constUuid)
         usersService = new UsersServiceImpl(usersRepository, usersMapper)
     }
 
@@ -40,6 +37,29 @@ class UsersServiceImplTest extends Specification {
 
         then: "the created user should be the expected one"
         assert storedUser.id == userId
+    }
+
+    def "should return a specific user"() {
+        given: "the userId: " + constUuid
+        and: "an expected user to be returned"
+        def expectedUserEntity = new UserEntity(constUuid, "username", "email@email.com")
+
+        and: "an expected user model"
+        def expectedUserModel = new UserModel(constUuid, "username", "email@email.com")
+
+        when: "the method is called to return the user"
+        def result = usersService.getUserById(constUuid)
+
+        and: "the repository is invoked"
+        1 * usersRepository.findById(constUuid) >> expectedUserEntity
+
+        and: "the mapper is invoked"
+        1 * usersMapper.mapToModel(expectedUserModel) >> expectedUserModel
+
+        then: "the returned user is the correct one"
+        assert result.id == expectedUserEntity.id
+        assert result.email == expectedUserEntity.email
+        assert result.username == expectedUserEntity.username
     }
 
 }
