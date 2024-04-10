@@ -1,9 +1,9 @@
 package com.crosstime.backend.service
 
-import com.crosstime.backend.model.User
+import java.util.UUID
 
 interface UsersService {
 
-    fun createUser(): User
+    fun createUser(email: String, username: String): UUID
 
 }
