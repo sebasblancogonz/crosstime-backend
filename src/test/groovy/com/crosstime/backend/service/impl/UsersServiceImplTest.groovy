@@ -25,8 +25,9 @@ class UsersServiceImplTest extends Specification {
 
     def "should store successfully the user and return the uuid"() {
         given: "a user to be created"
-        def userToBeSaved = new UserModel(constUuid, "Username", "email@email.com")
-        def userEntity = new UserEntity(constUuid, "Username", "email@email.com")
+        def userToBeSaved = new UserModel(null, "Username", "email@email.com")
+        def userEntity = new UserEntity(null, "Username", "email@email.com")
+        def storedUser = new UserEntity(constUuid, "Username", "email@email.com")
 
         when: "the create user method is called"
         def userId = usersService.createUser("email@email.com", "Username")
@@ -35,10 +36,10 @@ class UsersServiceImplTest extends Specification {
         1 * usersMapper.mapToEntity(userToBeSaved) >> userEntity
 
         then: "the repository should be invoked to save the user"
-        1 * usersRepository.save(userEntity) >> userEntity
+        1 * usersRepository.save(userEntity) >> storedUser
 
         then: "the created user should be the expected one"
-        assert userToBeSaved.id == userId
+        assert storedUser.id == userId
     }
 
 }

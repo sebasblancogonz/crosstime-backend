@@ -1,6 +1,7 @@
 CREATE TABLE users (
-    id varchar(36),
+    id varbinary(36),
     username varchar(50),
     email varchar(120),
-    password varchar(320)
+    password varchar(320),
+    PRIMARY KEY (id)
 );
