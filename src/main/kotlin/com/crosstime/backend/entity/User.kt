@@ -12,8 +12,8 @@ import java.util.UUID
 @Table(name = "users")
 data class User(
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     val id: UUID? = null,
     val username: String,
     val email: String
