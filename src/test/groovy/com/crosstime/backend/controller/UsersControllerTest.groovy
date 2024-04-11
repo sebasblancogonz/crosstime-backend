@@ -46,19 +46,16 @@ class UsersControllerTest extends Specification {
                 .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
+
         when: "The get user by id endpoint is called"
         def userResponse = objectMapper.readValue(createUserRequest.response.getContentAsString(), UserResponse.class)
-
-        expect: "The user previously stored is returned"
-        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users/{userId}", userResponse.userId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRequest)))
+        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users/{userId}", userResponse.userId))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
 
         def user = objectMapper.readValue(response.response.getContentAsString(), User.class)
 
-        and: "The information matches"
+        then: "The information matches"
         assert userRequest.email == user.email
         assert userRequest.username == user.username
         assert userResponse.userId == user.id
