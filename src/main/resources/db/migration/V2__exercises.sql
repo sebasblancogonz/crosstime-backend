@@ -2,23 +2,23 @@ CREATE TABLE exercises
 (
     id               INT AUTO_INCREMENT PRIMARY KEY,
     name             VARCHAR(60),
-    forceType        VARCHAR(10) NULL,
+    force_type        VARCHAR(10) NULL,
     level            VARCHAR(36),
     mechanic         VARCHAR(36) NULL,
     equipment        VARCHAR(24) NULL,
-    primaryMuscles   JSON,
-    secondaryMuscles JSON,
+    primary_muscles   JSON,
+    secondary_muscles JSON,
     instructions     JSON,
     category         VARCHAR(36),
     images           JSON,
-    keyName          VARCHAR(60)
+    key_name          VARCHAR(60)
 );
 
 ALTER TABLE users MODIFY COLUMN id varbinary(36) NOT NULL;
 ALTER TABLE users MODIFY COLUMN username varchar(50) NOT NULL;
 ALTER TABLE users MODIFY COLUMN email varchar(120) NOT NULL;
 
-INSERT INTO exercises (name,forceType,level,mechanic,equipment,primaryMuscles,secondaryMuscles,instructions,category,images,keyName)
+INSERT INTO exercises (name, force_type, level, mechanic, equipment, primary_muscles, secondary_muscles, instructions, category, images, key_name)
 VALUES
 ('3/4 Sit-Up','pull','beginner','compound','body only','["abdominals"]','[]','["Lie down on the floor and secure your feet. Your legs should be bent at the knees.","Place your hands behind or to the side of your head. You will begin with your back on the ground. This will be your starting position.","Flex your hips and spine to raise your torso toward your knees.","At the top of the contraction your torso should be perpendicular to the ground. Reverse the motion, going only ¾ of the way down.","Repeat for the recommended amount of repetitions."]','strength','["3_4_Sit-Up/0.jpg","3_4_Sit-Up/1.jpg"]','3_4_Sit-Up'),
 ('90/90 Hamstring','push','beginner',NULL,'body only','["hamstrings"]','["calves"]','["Lie on your back, with one leg extended straight out.","With the other leg, bend the hip and knee to 90 degrees. You may brace your leg with your hands if necessary. This will be your starting position.","Extend your leg straight into the air, pausing briefly at the top. Return the leg to the starting position.","Repeat for 10-20 repetitions, and then switch to the other leg."]','stretching','["90_90_Hamstring/0.jpg","90_90_Hamstring/1.jpg"]','90_90_Hamstring'),
