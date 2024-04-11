@@ -7,10 +7,13 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/users")
@@ -25,11 +28,17 @@ class UsersController(
             ?: run {
                 ResponseEntity.of(
                     ProblemDetail.forStatusAndDetail(
-                        HttpStatusCode.valueOf(500),
+                        HttpStatus.INTERNAL_SERVER_ERROR,
                         "The user could not be created"
                     )
                 ).build()
             };
     }
+
+    @GetMapping("/{userId}")
+    fun getUser(@PathVariable("userId") userId: String): ResponseEntity<Any> =
+        usersService.getUserById(UUID.fromString(userId))?.let { ResponseEntity.ok(it) }
+            ?: run { ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "User not found")).build() }
+
 
 }
