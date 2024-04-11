@@ -22,7 +22,7 @@ class UsersServiceImpl(
         return usersRepository.save(userEntity).id
     }
 
-    override fun getUserById(userId: UUID): User? {
+    override fun getUserById(userId: UUID): UserModel? {
         val userEntity = usersRepository.findById(userId)
         var user: UserModel? = null
         userEntity.ifPresent {
@@ -30,6 +30,14 @@ class UsersServiceImpl(
         }
 
         return user
+    }
+
+    override fun findAllUsers(): List<UserModel> {
+        val userEntities = usersRepository.findAll()
+        userEntities.ifEmpty {
+            return emptyList()
+        }
+        return usersMapper.mapToModelList(userEntities)
     }
 
     private fun buildUser(email: String, username: String) = UserModel(username = username, email = email)
