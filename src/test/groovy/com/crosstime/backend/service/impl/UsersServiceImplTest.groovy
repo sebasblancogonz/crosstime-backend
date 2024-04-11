@@ -72,4 +72,41 @@ class UsersServiceImplTest extends Specification {
         assert result == null
     }
 
+    def "should return all the user"() {
+        given: "an expected list of users to be returned"
+        def expectedUserEntities = [new UserEntity(constUuid, "username", "email@email.com")]
+        def expectedUserModelList = [new UserModel(constUuid, "username", "email@email.com")]
+
+        and: "the repository is invoked"
+        1 * usersRepository.findAll() >> { expectedUserEntities }
+
+        and: "the mapper is invoked"
+        1 * usersMapper.mapToModelList(expectedUserEntities) >> expectedUserModelList
+
+        when: "the method is called to return the user"
+        def result = usersService.findAllUsers(constUuid)
+
+
+        then: "the returned user is the correct one"
+        assert result.length == 1
+    }
+
+    def "should return an empty list of users"() {
+        given: "an expected empty list"
+        def emptyList = []
+
+        and: "the repository is invoked"
+        1 * usersRepository.findAll() >> { emptyList }
+
+        and: "the mapper is invoked"
+        0 * usersMapper.mapToModelList(_)
+
+        when: "the method is called to return the user"
+        def result = usersService.findAllUsers(constUuid)
+
+
+        then: "the returned user is the correct one"
+        assert result.length == 0
+    }
+
 }

@@ -40,4 +40,31 @@ class UsersMapperTest extends Specification {
         assert userModel.username == mappedEntity.username
     }
 
+    def "should map a user entity list to user model list"() {
+        given: "a user entity"
+        def userEntities = [new UserEntity(UUID.randomUUID(), "Username", "email@email.com")]
+
+        when: "the entity to model mapper is invoked"
+        def mappedModels = usersMapper.mapToModelList(userEntities)
+
+        then: "it should be correctly mapped"
+        assert mappedModels.length = 1
+        assert userEntities[0].email == mappedModels[0].email
+        assert userEntities[0].id == mappedModels[0].id
+        assert userEntities[0].username == mappedModels[0].username
+    }
+
+    def "should map a user model list to a user entity list"() {
+        given: "a user model"
+        def userModels = [new UserModel(UUID.randomUUID(), "Username", "email@email.com")]
+
+        when: "the entity to model mapper is invoked"
+        def mappedEntities = usersMapper.mapToEntityList(userModels)
+
+        then: "it should be correctly mapped"
+        assert userModels[0].email == mappedEntities[0].email
+        assert userModels[0].id == mappedEntities[0].id
+        assert userModels[0].username == mappedEntities[0].username
+    }
+
 }

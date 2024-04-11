@@ -3,6 +3,7 @@ package com.crosstime.backend.controller
 import com.crosstime.backend.model.User
 import com.crosstime.backend.request.UserRequest
 import com.crosstime.backend.response.UserResponse
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -59,6 +60,29 @@ class UsersControllerTest extends Specification {
         assert userRequest.email == user.email
         assert userRequest.username == user.username
         assert userResponse.userId == user.id
+    }
+
+    def "should retrieve a list of users"() {
+        given: "A created user"
+        def userRequest = new UserRequest("username", "email")
+        def createUserRequest = mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn()
+
+        when: "The get user by id endpoint is called"
+        def userResponse = objectMapper.readValue(createUserRequest.response.getContentAsString(), UserResponse.class)
+        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users", userResponse.userId))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn()
+
+        def users = objectMapper.readValue(response.response.getContentAsString(), new TypeReference<List<User>>(){})
+
+        then: "The information matches"
+        assert userRequest.email == users[0].email
+        assert userRequest.username == users[0].username
+        assert userResponse.userId == users[0].id
     }
 
 }
