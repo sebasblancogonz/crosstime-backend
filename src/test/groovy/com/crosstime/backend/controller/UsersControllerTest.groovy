@@ -65,24 +65,23 @@ class UsersControllerTest extends Specification {
     def "should retrieve a list of users"() {
         given: "A created user"
         def userRequest = new UserRequest("username", "email")
-        def createUserRequest = mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
 
         when: "The get user by id endpoint is called"
-        def userResponse = objectMapper.readValue(createUserRequest.response.getContentAsString(), UserResponse.class)
-        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users", userResponse.userId))
+        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
 
         def users = objectMapper.readValue(response.response.getContentAsString(), new TypeReference<List<User>>(){})
 
         then: "The information matches"
+        assert users.size() == 1
         assert userRequest.email == users[0].email
         assert userRequest.username == users[0].username
-        assert userResponse.userId == users[0].id
     }
 
 }
