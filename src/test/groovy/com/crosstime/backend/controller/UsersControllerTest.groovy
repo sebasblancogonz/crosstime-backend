@@ -22,7 +22,7 @@ import spock.lang.Title
 @Narrative("This class will test only the happy path and the sad path for each rest operation over the users api")
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class UsersControllerTest extends Specification {
 
     @Autowired
