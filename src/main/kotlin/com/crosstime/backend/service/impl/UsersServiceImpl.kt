@@ -1,6 +1,7 @@
 package com.crosstime.backend.service.impl
 
 import com.crosstime.backend.mapper.UsersMapper
+import com.crosstime.backend.model.User
 import com.crosstime.backend.model.User as UserModel
 import com.crosstime.backend.entity.User as UserEntity
 import com.crosstime.backend.repository.UsersRepository
@@ -16,9 +17,19 @@ class UsersServiceImpl(
 
     override fun createUser(email: String, username: String): UUID? {
         val user = buildUser(email, username)
-        val userEntity: UserEntity = usersMapper.mapToEntity(user)
+        val userEntity = usersMapper.mapToEntity(user)
 
         return usersRepository.save(userEntity).id
+    }
+
+    override fun getUserById(userId: UUID): User? {
+        val userEntity = usersRepository.findById(userId)
+        var user: UserModel? = null
+        userEntity.ifPresent {
+            user = usersMapper.mapToModel(it)
+        }
+
+        return user
     }
 
     private fun buildUser(email: String, username: String) = UserModel(username = username, email = email)
