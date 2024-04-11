@@ -1,5 +1,6 @@
 package com.crosstime.backend.controller
 
+import com.crosstime.backend.model.User
 import com.crosstime.backend.request.UserRequest
 import com.crosstime.backend.response.UserResponse
 import com.crosstime.backend.service.UsersService
@@ -40,5 +41,7 @@ class UsersController(
         usersService.getUserById(UUID.fromString(userId))?.let { ResponseEntity.ok(it) }
             ?: run { ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "User not found")).build() }
 
+    @GetMapping
+    fun getAllUsers(): ResponseEntity<List<User>> = ResponseEntity.ok(usersService.findAllUsers())
 
 }

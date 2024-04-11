@@ -48,7 +48,7 @@ class UsersMapperTest extends Specification {
         def mappedModels = usersMapper.mapToModelList(userEntities)
 
         then: "it should be correctly mapped"
-        assert mappedModels.length = 1
+        assert mappedModels.size() == 1
         assert userEntities[0].email == mappedModels[0].email
         assert userEntities[0].id == mappedModels[0].id
         assert userEntities[0].username == mappedModels[0].username
@@ -62,6 +62,7 @@ class UsersMapperTest extends Specification {
         def mappedEntities = usersMapper.mapToEntityList(userModels)
 
         then: "it should be correctly mapped"
+        assert mappedEntities.size() == 1
         assert userModels[0].email == mappedEntities[0].email
         assert userModels[0].id == mappedEntities[0].id
         assert userModels[0].username == mappedEntities[0].username

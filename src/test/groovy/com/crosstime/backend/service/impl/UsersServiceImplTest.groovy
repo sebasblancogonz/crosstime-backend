@@ -72,7 +72,7 @@ class UsersServiceImplTest extends Specification {
         assert result == null
     }
 
-    def "should return all the user"() {
+    def "should return all the users"() {
         given: "an expected list of users to be returned"
         def expectedUserEntities = [new UserEntity(constUuid, "username", "email@email.com")]
         def expectedUserModelList = [new UserModel(constUuid, "username", "email@email.com")]
@@ -84,11 +84,11 @@ class UsersServiceImplTest extends Specification {
         1 * usersMapper.mapToModelList(expectedUserEntities) >> expectedUserModelList
 
         when: "the method is called to return the user"
-        def result = usersService.findAllUsers(constUuid)
+        def result = usersService.findAllUsers()
 
 
         then: "the returned user is the correct one"
-        assert result.length == 1
+        assert result.size() == 1
     }
 
     def "should return an empty list of users"() {
@@ -102,11 +102,11 @@ class UsersServiceImplTest extends Specification {
         0 * usersMapper.mapToModelList(_)
 
         when: "the method is called to return the user"
-        def result = usersService.findAllUsers(constUuid)
+        def result = usersService.findAllUsers()
 
 
         then: "the returned user is the correct one"
-        assert result.length == 0
+        assert result.size() == 0
     }
 
 }
