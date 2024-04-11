@@ -21,6 +21,7 @@ import spock.lang.Title
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "/db/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/db/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class UsersControllerTest extends Specification {
 
     private static A_UUID = '5fcab368-b148-41fe-a0ee-91fb6b5a63ee'
