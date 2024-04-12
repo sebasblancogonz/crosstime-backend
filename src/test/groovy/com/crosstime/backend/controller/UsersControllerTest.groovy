@@ -17,11 +17,11 @@ import spock.lang.Specification
 import spock.lang.Title
 
 @Title("The users controller test class")
-@Narrative("This class will test only the happy path and the sad path for each rest operation over the users api")
+@Narrative("This class will test only the happy path for each rest operation over the users api")
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "/db/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/db/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "/db/users/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/db/users/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class UsersControllerTest extends Specification {
 
     private static A_UUID = '5fcab368-b148-41fe-a0ee-91fb6b5a63ee'

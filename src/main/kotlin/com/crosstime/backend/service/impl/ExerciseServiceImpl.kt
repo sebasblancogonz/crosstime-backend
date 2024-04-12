@@ -13,7 +13,11 @@ class ExerciseServiceImpl(
 ) : ExerciseService {
 
     override fun findAllExercises(): List<Exercise> {
-        return exerciseMapper.mapToModelList(exerciseRepository.findAll())
+        val exerciseEntities = exerciseRepository.findAll()
+        exerciseEntities.ifEmpty {
+            return emptyList()
+        }
+        return exerciseMapper.mapToModelList(exerciseEntities)
     }
 
 }

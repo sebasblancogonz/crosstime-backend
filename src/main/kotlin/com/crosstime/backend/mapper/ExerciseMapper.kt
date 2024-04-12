@@ -7,7 +7,7 @@ import org.mapstruct.Mapper
 @Mapper
 interface ExerciseMapper {
 
-    fun mapToModel(exercise: ExerciseEntity): ExerciseModel
+    fun toModel(exercise: ExerciseEntity): ExerciseModel
     fun mapToModelList(exercise: List<ExerciseEntity>): List<ExerciseModel>
 
 }
