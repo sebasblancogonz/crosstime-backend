@@ -45,7 +45,7 @@ class ExerciseServiceImplSpec extends Specification {
         def emptyList = []
 
         and: "the repository is invoked"
-        1 * exerciseRepository.findAll() >> { emptyList }
+        1 * exerciseRepository.findAll(PageRequest.of(0, 10)) >> new PageImpl<>([],PageRequest.of(0, 10), 0)
 
         and: "the mapper is invoked"
         0 * exerciseMapper.toModel(_)
@@ -55,7 +55,7 @@ class ExerciseServiceImplSpec extends Specification {
 
 
         then: "the returned user is the correct one"
-        assert result.size() == 0
+        assert result.content.size() == 0
     }
 
 }
