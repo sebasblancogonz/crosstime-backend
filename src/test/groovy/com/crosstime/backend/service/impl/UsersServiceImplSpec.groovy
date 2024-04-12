@@ -7,7 +7,7 @@ import com.crosstime.backend.entity.User as UserEntity
 import spock.lang.Specification
 
 
-class UsersServiceImplTest extends Specification {
+class UsersServiceImplSpec extends Specification {
 
     private static final UUID constUuid = UUID.randomUUID()
     private UsersMapper usersMapper = Mock(UsersMapper.class)

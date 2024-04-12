@@ -6,7 +6,7 @@ import spock.lang.Specification
 import com.crosstime.backend.model.User as UserModel
 import com.crosstime.backend.entity.User as UserEntity
 
-class UsersMapperTest extends Specification {
+class UsersMapperSpec extends Specification {
 
     private UsersMapper usersMapper
 
