@@ -36,7 +36,8 @@ class ExerciseControllerSpec extends Specification {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
         then: "The response is a list of exercises"
-        def exercises = objectMapper.readValue(response.response.getContentAsString(), new TypeReference<List<Exercise>>() {})
+        def page = objectMapper.readValue(response.response.getContentAsString(), Map)
+        def exercises = objectMapper.convertValue(page.get("content"), new TypeReference<List<Exercise>>() {})
         assert exercises.size() == 2
     }
 
