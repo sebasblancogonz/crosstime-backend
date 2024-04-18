@@ -11,6 +11,6 @@ data class Exercise(
     val secondaryMuscles: List<String>,
     val instructions: List<String>,
     val category: String,
-    val images: List<String>,
+    var images: List<String>,
     val keyName: String
 )

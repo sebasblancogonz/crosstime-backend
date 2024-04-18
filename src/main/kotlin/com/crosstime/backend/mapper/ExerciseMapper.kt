@@ -1,13 +1,15 @@
 package com.crosstime.backend.mapper
 
-import com.crosstime.backend.model.Exercise as ExerciseModel
-import com.crosstime.backend.entity.Exercise as ExerciseEntity
+import org.mapstruct.Context
+import org.mapstruct.DecoratedWith
 import org.mapstruct.Mapper
+import com.crosstime.backend.entity.Exercise as ExerciseEntity
+import com.crosstime.backend.model.Exercise as ExerciseModel
 
 @Mapper
+@DecoratedWith(ExerciseMapperDecorator::class)
 interface ExerciseMapper {
 
-    fun toModel(exercise: ExerciseEntity): ExerciseModel
-    fun mapToModelList(exercise: List<ExerciseEntity>): List<ExerciseModel>
+    fun toModel(exercise: ExerciseEntity, @Context imagesUrl: String): ExerciseModel
 
 }

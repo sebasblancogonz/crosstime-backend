@@ -1,5 +1,6 @@
 package com.crosstime.backend.service.impl
 
+import com.crosstime.backend.configuration.CDNImagesProperties
 import com.crosstime.backend.entity.Exercise as ExerciseEntity
 import com.crosstime.backend.mapper.ExerciseMapper
 import com.crosstime.backend.model.Exercise as ExerciseModel
@@ -13,10 +14,12 @@ class ExerciseServiceImplSpec extends Specification {
     private static final UUID constUuid = UUID.randomUUID()
     private ExerciseMapper exerciseMapper = Mock(ExerciseMapper.class)
     private ExerciseRepository exerciseRepository = Mock(ExerciseRepository.class)
+    private CDNImagesProperties cdnImagesProperties = Mock(CDNImagesProperties.class)
     private ExerciseServiceImpl exerciseService
 
     def setup() {
-        exerciseService = new ExerciseServiceImpl(exerciseRepository, exerciseMapper)
+        exerciseService = new ExerciseServiceImpl(exerciseRepository, exerciseMapper, cdnImagesProperties)
+        cdnImagesProperties.getUrl() >> "https://test-url.test/"
     }
 
     def "should return all the users"() {
@@ -30,7 +33,7 @@ class ExerciseServiceImplSpec extends Specification {
 
         and: "the mapper is invoked"
         expectedExerciseEntities.eachWithIndex { entity, index ->
-            1 * exerciseMapper.toModel(entity) >> expectedExerciseModels[index]
+            1 * exerciseMapper.toModel(entity, "https://test-url.test/") >> expectedExerciseModels[index]
         }
 
         when: "the method is called to return the user"

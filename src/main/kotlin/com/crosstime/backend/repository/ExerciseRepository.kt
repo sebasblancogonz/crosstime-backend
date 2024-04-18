@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ExerciseRepository : JpaRepository<Exercise, Long> {
     override fun findAll(pageable: Pageable): Page<Exercise>
+
 }
