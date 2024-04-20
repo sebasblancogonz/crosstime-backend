@@ -22,8 +22,8 @@ class ExerciseServiceImplSpec extends Specification {
         cdnImagesProperties.getUrl() >> "https://test-url.test/"
     }
 
-    def "should return all the users"() {
-        given: "an expected list of users to be returned"
+    def "should return all the exercises"() {
+        given: "an expected list of exercises to be returned"
         def expectedExerciseEntities = [new ExerciseEntity(1, "3/4 Sit-Up","pull","beginner","compound","body only","[\"abdominals\"]","[]","[\"Lie down on the floor and secure your feet. Your legs should be bent at the knees.\",\"Place your hands behind or to the side of your head. You will begin with your back on the ground. This will be your starting position.\",\"Flex your hips and spine to raise your torso toward your knees.\",\"At the top of the contraction your torso should be perpendicular to the ground. Reverse the motion, going only ¾ of the way down.\",\"Repeat for the recommended amount of repetitions.\"]","strength","[\"3_4_Sit-Up/0.jpg\",\"3_4_Sit-Up/1.jpg\"]","3_4_Sit-Up")]
         def expectedExerciseModels = [new ExerciseModel(1, "3/4 Sit-Up","pull","beginner","compound","body only",["abdominals"], [],["Lie down on the floor and secure your feet. Your legs should be bent at the knees.","Place your hands behind or to the side of your head. You will begin with your back on the ground. This will be your starting position.","Flex your hips and spine to raise your torso toward your knees.","At the top of the contraction your torso should be perpendicular to the ground. Reverse the motion, going only ¾ of the way down.","Repeat for the recommended amount of repetitions."],"strength",["3_4_Sit-Up/0.jpg","3_4_Sit-Up/1.jpg"],"3_4_Sit-Up")]
         def expectedPage = new PageImpl<>(expectedExerciseEntities, PageRequest.of(0, 10), 1)
@@ -36,14 +36,14 @@ class ExerciseServiceImplSpec extends Specification {
             1 * exerciseMapper.toModel(entity, "https://test-url.test/") >> expectedExerciseModels[index]
         }
 
-        when: "the method is called to return the user"
+        when: "the method is called to return the exercises"
         def result = exerciseService.findAllExercises(PageRequest.of(0, 10))
 
-        then: "the returned user is the correct one"
+        then: "the returned exercises are expected"
         assert result.content == expectedExerciseModels
     }
 
-    def "should return an empty list of users"() {
+    def "should return an empty list of exercises"() {
         given: "an expected empty list"
         def emptyList = []
 
@@ -53,11 +53,11 @@ class ExerciseServiceImplSpec extends Specification {
         and: "the mapper is invoked"
         0 * exerciseMapper.toModel(_)
 
-        when: "the method is called to return the user"
+        when: "the method is called to return the exercises"
         def result = exerciseService.findAllExercises(PageRequest.of(0, 10))
 
 
-        then: "the returned user is the correct one"
+        then: "no exercises are returned"
         assert result.content.size() == 0
     }
 

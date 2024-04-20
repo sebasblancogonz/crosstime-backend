@@ -1,11 +1,12 @@
 package com.crosstime.backend.service.impl
 
-import com.crosstime.backend.mapper.UsersMapper
-import com.crosstime.backend.repository.UsersRepository
-import com.crosstime.backend.model.User as UserModel
 import com.crosstime.backend.entity.User as UserEntity
+import com.crosstime.backend.exeption.UserNotFoundException
+import com.crosstime.backend.exeption.UserNotSavedException
+import com.crosstime.backend.mapper.UsersMapper
+import com.crosstime.backend.model.User as UserModel
+import com.crosstime.backend.repository.UsersRepository
 import spock.lang.Specification
-
 
 class UsersServiceImplSpec extends Specification {
 
@@ -37,6 +38,25 @@ class UsersServiceImplSpec extends Specification {
         assert storedUser.id == userId
     }
 
+    def "should throw an exception when the user is not created"() {
+        given: "a user to be created"
+        def userEntityToBeSaved = new UserEntity(null, "Username", "")
+        def userEntity = Mock(UserEntity)
+        userEntity.id >> null
+
+        and: "the mapper should be called"
+        1 * usersMapper.mapToEntity(_) >> userEntityToBeSaved
+
+        and: "the repository should be invoked to save the user"
+        1 * usersRepository.save(userEntityToBeSaved) >> userEntity
+
+        when: "the create user method is called"
+        usersService.createUser("", "Username")
+
+        then: "an exception is thrown"
+        thrown(UserNotSavedException)
+    }
+
     def "should return a specific user"() {
         given: "an expected user to be returned"
         def expectedUserEntity = new UserEntity(constUuid, "username", "email@email.com")
@@ -66,10 +86,10 @@ class UsersServiceImplSpec extends Specification {
         0 * usersMapper.mapToModel(_)
 
         when: "the method is called to return the user"
-        def result = usersService.getUserById(constUuid)
+        usersService.getUserById(constUuid)
 
         then: "the returned user is null"
-        assert result == null
+        thrown(UserNotFoundException)
     }
 
     def "should return all the users"() {

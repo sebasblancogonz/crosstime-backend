@@ -1,6 +1,7 @@
 package com.crosstime.backend.entity
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -42,30 +43,8 @@ data class Exercise(
     val images: List<String>
         get() = deserializeJsonArray(imagesJson)
 
-    // Custom setters to serialize List<String> to JSON strings
-    fun setPrimaryMuscles(primaryMuscles: List<String>) {
-        primaryMusclesJson = serializeJsonArray(primaryMuscles)
-    }
-
-    fun setSecondaryMuscles(secondaryMuscles: List<String>) {
-        secondaryMusclesJson = serializeJsonArray(secondaryMuscles)
-    }
-
-    fun setInstructions(instructions: List<String>) {
-        instructionsJson = serializeJsonArray(instructions)
-    }
-
-    fun setImages(images: List<String>) {
-        imagesJson = serializeJsonArray(images)
-    }
-
-    // Custom method to deserialize JSON array to List<String>
     private fun deserializeJsonArray(jsonArray: String?): List<String> {
-        return ObjectMapper().readValue(jsonArray, List::class.java) as List<String>
+        return ObjectMapper().readValue<List<String>>(jsonArray ?: "[]")
     }
 
-    // Custom method to serialize List<String> to JSON array
-    private fun serializeJsonArray(list: List<String>): String {
-        return ObjectMapper().writeValueAsString(list)
-    }
 }

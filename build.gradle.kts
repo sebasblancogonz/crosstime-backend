@@ -7,6 +7,8 @@ plugins {
     kotlin("jvm") version "1.9.23"
     kotlin("kapt") version "1.9.10"
     kotlin("plugin.spring") version "1.9.23"
+    id("org.sonarqube") version "4.0.0.2929"
+    id("jacoco")
     kotlin("plugin.jpa") version "1.9.23"
     id("groovy")
 }
@@ -23,6 +25,20 @@ kapt {
     arguments {
         arg("mapstruct.defaultComponentModel", "spring")
         arg("mapstruct.unmappedTargetPolicy", "IGNORE")
+    }
+}
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "crosstime")
+        property("sonar.projectName", "crosstime")
+        property("sonar.projectVersion", version)
+        property("sonar.tests", "src/test/groovy")
+        property("sonar.host.url", "http://localhost:9000")
+        property("sonar.token", "sqp_354b5832d9fc304f58f4e5cd9d67f20639b6ddbe")
+        property("sonar.language", "kotlin")
+        property("sonar.sources", "src/main/kotlin")
+        property("sonar.junit.reportPaths", "${project.buildDir}/build/test-results/test")
     }
 }
 
@@ -82,7 +98,28 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
     testLogging {
         events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
     }
+
+    finalizedBy("jacocoTestReport")
+}
+
+tasks.withType<JacocoReport> {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    afterEvaluate {
+        classDirectories.setFrom(
+            files(classDirectories.files.map {
+                fileTree(it).exclude("**/model/**", "**/entity/**")
+            })
+        )
+    }
+    dependsOn(tasks.test)
 }
