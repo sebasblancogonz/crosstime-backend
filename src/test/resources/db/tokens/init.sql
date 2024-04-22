@@ -1,2 +1,1 @@
-INSERT INTO users values (x'5fcab368b14841fea0ee91fb6b5a63ee', 'Username', 'email@email.com', '$2a$10$edNFyg9/dWIJ4a.X3Vo6A.4wS3k.1.iQ7b6ysm2NkJ8hSdWWocBCu', 'user');
-INSERT INTO tokens VALUES (1, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjE3MTM3Mjk4MDksImV4cCI6MTcxMzczNzAwOX0.MzG1CGAGcxXrungdgSm6kKXB3QxVbr4ghM1VRqj2Fdw', 'BEARER', 'false', 'false', x'5fcab368b14841fea0ee91fb6b5a63ee');
+INSERT INTO tokens VALUES (1, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjk5OTk5OTk5OTk5OTk5LCJleHAiOjk5OTk5OTk5OTk5OTk5fQ.f2KMM65Zqq4urAVBER31Mqa3gk4W9XfCB1sJASg_0pE', 'BEARER', 'false', 'false', x'5fcab368b14841fea0ee91fb6b5a63ee');

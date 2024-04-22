@@ -1,2 +1,1 @@
-DELETE FROM users;
 DELETE FROM tokens;
