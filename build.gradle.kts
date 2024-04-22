@@ -38,7 +38,7 @@ sonarqube {
         property("sonar.token", "sqp_354b5832d9fc304f58f4e5cd9d67f20639b6ddbe")
         property("sonar.language", "kotlin")
         property("sonar.sources", "src/main/kotlin")
-        property("sonar.junit.reportPaths", "${project.buildDir}/build/test-results/test")
+        property("sonar.junit.reportPaths", "${project.buildDir}/test-results/test")
     }
 }
 
@@ -55,6 +55,7 @@ repositories {
 extra["sentryVersion"] = "7.3.0"
 
 dependencies {
+    // Spring
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-hateoas")
@@ -62,17 +63,33 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.apache.commons:commons-text:1.12.0")
+
+    // Sentry
     implementation("io.sentry:sentry-spring-boot-starter-jakarta")
+
+    // JWT
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+    //Flyway
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-mysql")
+
+    // Mapstruct and Lombok
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.mapstruct:mapstruct:1.5.3.Final")
     compileOnly("org.projectlombok:lombok")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
     kapt("org.mapstruct:mapstruct-processor:1.5.3.Final")
+
+    // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.spockframework:spock-core:2.4-M4-groovy-4.0")
@@ -117,7 +134,7 @@ tasks.withType<JacocoReport> {
     afterEvaluate {
         classDirectories.setFrom(
             files(classDirectories.files.map {
-                fileTree(it).exclude("**/model/**", "**/entity/**")
+                fileTree(it).exclude("**/model/**", "**/entity/**", "**/request/**", "**/response/**", "**/configuration/**")
             })
         )
     }
