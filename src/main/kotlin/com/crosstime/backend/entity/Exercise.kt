@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.apache.commons.text.StringEscapeUtils
 
 @Entity
 @Table(name = "exercises")
@@ -44,7 +45,16 @@ data class Exercise(
         get() = deserializeJsonArray(imagesJson)
 
     private fun deserializeJsonArray(jsonArray: String?): List<String> {
-        return ObjectMapper().readValue<List<String>>(jsonArray ?: "[]")
+        jsonArray?.let {
+            if (it.isNotEmpty() && it.startsWith("\"") && it.endsWith("\"")) {
+                return deserialize(StringEscapeUtils.unescapeJson(it.substring(1, it.length - 1)))
+            }
+        }
+        return deserialize(jsonArray ?: "[]")
+    }
+
+    private fun deserialize(json: String?): List<String> {
+        return ObjectMapper().readValue<List<String>>(json ?: "[]")
     }
 
 }
