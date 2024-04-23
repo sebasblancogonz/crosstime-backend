@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.crypto.password.PasswordEncoder
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.lang.reflect.UndeclaredThrowableException
 
@@ -211,7 +212,8 @@ class AuthServiceImplSpec extends Specification {
         1 * httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED)
     }
 
-    def "should send an error if the refresh token is null or has incorrect format"(String description, String token) {
+    @Unroll
+    def "should send an error if the refresh token #description"(String token) {
         given: "an httpServletRequest"
         def httpServletRequest = Mock(HttpServletRequest)
         def httpServletResponse = Mock(HttpServletResponse)
