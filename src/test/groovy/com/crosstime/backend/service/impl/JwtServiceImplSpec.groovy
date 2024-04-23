@@ -1,64 +1,58 @@
 package com.crosstime.backend.service.impl
 
-import com.crosstime.backend.configuration.CDNImagesProperties
-import com.crosstime.backend.entity.Exercise as ExerciseEntity
-import com.crosstime.backend.mapper.ExerciseMapper
-import com.crosstime.backend.model.Exercise as ExerciseModel
-import com.crosstime.backend.repository.ExerciseRepository
-import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.PageRequest
+import com.crosstime.backend.entity.Role
+import com.crosstime.backend.entity.User as UserEntity
 import spock.lang.Specification
 
-class ExerciseServiceImplSpec extends Specification {
+class JwtServiceImplSpec extends Specification {
 
-    private static final UUID constUuid = UUID.randomUUID()
-    private ExerciseMapper exerciseMapper = Mock(ExerciseMapper.class)
-    private ExerciseRepository exerciseRepository = Mock(ExerciseRepository.class)
-    private CDNImagesProperties cdnImagesProperties = Mock(CDNImagesProperties.class)
-    private ExerciseServiceImpl exerciseService
+    private JwtServiceImpl jwtService
 
     def setup() {
-        exerciseService = new ExerciseServiceImpl(exerciseRepository, exerciseMapper, cdnImagesProperties)
-        cdnImagesProperties.getUrl() >> "https://test-url.test/"
+        jwtService = new JwtServiceImpl("XYP8xCLLORE+23lE/2ELxIdh67nYCuxqPoudS5TLIsh4NhzZ6RnRtj1/wCIANDu+fILa/ipv3kaE3LohOha/0rfNSq9OmFAxwq9AYxqIkkaywjOe0cl6/whB", 3600000, 3600000)
     }
 
-    def "should return all the exercises"() {
-        given: "an expected list of exercises to be returned"
-        def expectedExerciseEntities = [new ExerciseEntity(1, "3/4 Sit-Up","pull","beginner","compound","body only","[\"abdominals\"]","[]","[\"Lie down on the floor and secure your feet. Your legs should be bent at the knees.\",\"Place your hands behind or to the side of your head. You will begin with your back on the ground. This will be your starting position.\",\"Flex your hips and spine to raise your torso toward your knees.\",\"At the top of the contraction your torso should be perpendicular to the ground. Reverse the motion, going only ¾ of the way down.\",\"Repeat for the recommended amount of repetitions.\"]","strength","[\"3_4_Sit-Up/0.jpg\",\"3_4_Sit-Up/1.jpg\"]","3_4_Sit-Up")]
-        def expectedExerciseModels = [new ExerciseModel(1, "3/4 Sit-Up","pull","beginner","compound","body only",["abdominals"], [],["Lie down on the floor and secure your feet. Your legs should be bent at the knees.","Place your hands behind or to the side of your head. You will begin with your back on the ground. This will be your starting position.","Flex your hips and spine to raise your torso toward your knees.","At the top of the contraction your torso should be perpendicular to the ground. Reverse the motion, going only ¾ of the way down.","Repeat for the recommended amount of repetitions."],"strength",["3_4_Sit-Up/0.jpg","3_4_Sit-Up/1.jpg"],"3_4_Sit-Up")]
-        def expectedPage = new PageImpl<>(expectedExerciseEntities, PageRequest.of(0, 10), 1)
+    def "class with null properties"() {
+        when: "The class is instantiated with null properties"
+        def jwtService = new JwtServiceImpl(null, 0, 0)
 
-        and: "the repository is invoked"
-        1 * exerciseRepository.findAll(PageRequest.of(0, 10)) >> expectedPage
-
-        and: "the mapper is invoked"
-        expectedExerciseEntities.eachWithIndex { entity, index ->
-            1 * exerciseMapper.toModel(entity, "https://test-url.test/") >> expectedExerciseModels[index]
-        }
-
-        when: "the method is called to return the exercises"
-        def result = exerciseService.findAllExercises(PageRequest.of(0, 10))
-
-        then: "the returned exercises are expected"
-        assert result.content == expectedExerciseModels
+        then: "The properties are null"
+        assert jwtService.secretKey == null
+        assert jwtService.expiration == 0
+        assert jwtService.refreshExpiration == 0
     }
 
-    def "should return an empty list of exercises"() {
-        given: "an expected empty list"
-        def emptyList = []
+    def "should return a jwt token"() {
+        given: "A user entity"
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
 
-        and: "the repository is invoked"
-        1 * exerciseRepository.findAll(PageRequest.of(0, 10)) >> new PageImpl<>([],PageRequest.of(0, 10), 0)
+        when: "The method is called"
+        def token = jwtService.generateToken(new HashMap(), userEntity)
 
-        and: "the mapper is invoked"
-        0 * exerciseMapper.toModel(_)
+        then: "The token is not null"
+        assert token != null
+    }
 
-        when: "the method is called to return the exercises"
-        def result = exerciseService.findAllExercises(PageRequest.of(0, 10))
+    def "should return a jwt token"() {
+        given: "A user entity"
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
 
+        when: "The method is called"
+        def token = jwtService.generateToken(userEntity)
 
-        then: "no exercises are returned"
-        assert result.content.size() == 0
+        then: "The token is not null"
+        assert token != null
+    }
+
+    def "should refresh a jwt token"() {
+        given: "A user entity"
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+
+        when: "The method is called"
+        def token = jwtService.generateRefreshToken(userEntity)
+
+        then: "The token is not null"
+        assert token != null
     }
 
 }
