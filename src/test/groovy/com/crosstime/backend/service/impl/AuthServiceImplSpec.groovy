@@ -126,6 +126,22 @@ class AuthServiceImplSpec extends Specification {
         assert response.refreshToken == "refreshToken"
     }
 
+    def "should authenticate a user"() {
+        given: "an authentication request"
+        def authenticationRequest = new AuthenticationRequest("test@test.com", "test")
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+
+        and: "the user exists in the database"
+        1 * usersRepository.findByEmail(authenticationRequest.email) >> null
+
+        when: "The method is called"
+        authService.authenticate(authenticationRequest)
+
+        then: "The response contains the token and the refresh token"
+        def exception = thrown(UserNotFoundException)
+        assert exception.message == "User with email test@test.com not found."
+    }
+
     def "should refresh a token"() {
         given: "an httpServletRequest"
         def httpServletRequest = Mock(HttpServletRequest)
@@ -245,7 +261,7 @@ class AuthServiceImplSpec extends Specification {
         1 * httpServletRequest.getHeader("Authorization") >> { throw new IOException("error") }
 
         when: "The method is called"
-        def response = authService.refreshToken(httpServletRequest, httpServletResponse)
+        authService.refreshToken(httpServletRequest, httpServletResponse)
 
         then: "response should send an error"
         def exception = thrown(UndeclaredThrowableException)
