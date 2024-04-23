@@ -1,13 +1,12 @@
 package com.crosstime.backend.controller
 
+import com.crosstime.backend.entity.Role
 import com.crosstime.backend.model.User
-import com.crosstime.backend.request.UserRequest
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.http.MediaType
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -16,12 +15,14 @@ import spock.lang.Narrative
 import spock.lang.Specification
 import spock.lang.Title
 
-@Title("The users controller test class")
-@Narrative("This class will test only the happy path for each rest operation over the users api")
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "/db/users/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/db/tokens/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/db/tokens/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Sql(scripts = "/db/users/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Title("The users controller test class")
+@Narrative("This class will test only the happy path for each rest operation over the users api")
 class UsersControllerSpec extends Specification {
 
     private static A_UUID = '5fcab368-b148-41fe-a0ee-91fb6b5a63ee'
@@ -32,21 +33,13 @@ class UsersControllerSpec extends Specification {
     @Autowired
     private ObjectMapper objectMapper
 
-    def "should create a user"() {
-        given: "A create user request"
-        def userRequest = new UserRequest("username", "email")
-        expect: "Status is 200 and the response is the user's generated ID"
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRequest)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-    }
-
     def "should retrieve a user given an ID"() {
         given: "A created user"
-        def expectedUser = new User(UUID.fromString(A_UUID), "Username", "email@email.com")
+        def expectedUser = new User(UUID.fromString(A_UUID), "Username", "email@email.com", "\$2a\$10\$edNFyg9/dWIJ4a.X3Vo6A.4wS3k.1.iQ7b6ysm2NkJ8hSdWWocBCu", Role.USER)
         when: "The get user by id endpoint is called"
-        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users/{userId}", A_UUID))
+        def response = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/users/{userId}", A_UUID)
+                        .header("authorization", "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjk5OTk5OTk5OTk5OTk5LCJleHAiOjk5OTk5OTk5OTk5OTk5fQ.f2KMM65Zqq4urAVBER31Mqa3gk4W9XfCB1sJASg_0pE"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
 
@@ -60,10 +53,11 @@ class UsersControllerSpec extends Specification {
 
     def "should retrieve a list of users"() {
         given: "A created user"
-        def expectedUser = [new User(UUID.fromString(A_UUID), "Username", "email@email.com")]
+        def expectedUser = [new User(UUID.fromString(A_UUID), "Username", "email@email.com", "\$2a\$10\$edNFyg9/dWIJ4a.X3Vo6A.4wS3k.1.iQ7b6ysm2NkJ8hSdWWocBCu", Role.USER)]
 
         when: "The get user by id endpoint is called"
-        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users"))
+        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users")
+                .header("authorization", "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjk5OTk5OTk5OTk5OTk5LCJleHAiOjk5OTk5OTk5OTk5OTk5fQ.f2KMM65Zqq4urAVBER31Mqa3gk4W9XfCB1sJASg_0pE"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
 

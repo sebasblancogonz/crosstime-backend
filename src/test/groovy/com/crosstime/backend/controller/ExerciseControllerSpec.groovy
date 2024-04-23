@@ -19,8 +19,11 @@ import spock.lang.Title
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "/db/exercises/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/db/users/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/db/tokens/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = "/db/tokens/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "/db/users/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Sql(scripts = "/db/exercises/clean.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
-@Sql(scripts = "/db/exercises/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class ExerciseControllerSpec extends Specification {
 
     @Autowired
@@ -32,7 +35,8 @@ class ExerciseControllerSpec extends Specification {
     def "should return a list of exercises"() {
         given: "A request to get all exercises"
         when: "The get all exercises endpoint is called"
-        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/exercises"))
+        def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/exercises")
+                .header("authorization", "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjk5OTk5OTk5OTk5OTk5LCJleHAiOjk5OTk5OTk5OTk5OTk5fQ.f2KMM65Zqq4urAVBER31Mqa3gk4W9XfCB1sJASg_0pE"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
         then: "The response is a list of exercises"

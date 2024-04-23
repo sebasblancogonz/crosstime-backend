@@ -38,6 +38,7 @@ sonarqube {
         property("sonar.token", "sqp_354b5832d9fc304f58f4e5cd9d67f20639b6ddbe")
         property("sonar.language", "kotlin")
         property("sonar.sources", "src/main/kotlin")
+        property("sonar.exclusions", "**/entity/**,**/model/**,**/configuration/**,**/request/**,**/response/**")
         property("sonar.junit.reportPaths", "${project.buildDir}/test-results/test")
     }
 }

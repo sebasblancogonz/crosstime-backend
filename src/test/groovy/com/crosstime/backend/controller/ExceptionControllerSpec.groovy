@@ -1,4 +1,4 @@
-package com.crosstime.backend.service.impl
+package com.crosstime.backend.controller
 
 import com.crosstime.backend.controller.ExceptionController
 import com.crosstime.backend.exeption.UserNotFoundException

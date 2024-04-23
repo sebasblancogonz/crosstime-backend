@@ -8,7 +8,7 @@ import com.crosstime.backend.model.Exercise as ExerciseModel
 
 @Mapper
 @DecoratedWith(ExerciseMapperDecorator::class)
-interface ExerciseMapper {
+fun interface ExerciseMapper {
 
     fun toModel(exercise: ExerciseEntity, @Context imagesUrl: String): ExerciseModel
 
