@@ -142,8 +142,3 @@ tasks.withType<JacocoReport> {
     }
     dependsOn(tasks.test)
 }
-
-
-tasks.withType<BootJar> {
-    mainClass.set("com.crosstime.backend.CrosstimeBackendApplication")
-}
