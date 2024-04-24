@@ -145,5 +145,5 @@ tasks.withType<JacocoReport> {
 
 
 tasks.withType<BootJar> {
-    mainClass.set("com.crosstime.backend.BackendApplication")
+    mainClass.set("com.crosstime.backend.CrosstimeBackendApplication")
 }
