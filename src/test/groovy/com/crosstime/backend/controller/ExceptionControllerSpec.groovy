@@ -1,6 +1,7 @@
 package com.crosstime.backend.controller
 
-import com.crosstime.backend.controller.ExceptionController
+
+import com.crosstime.backend.exeption.EmailAlreadyRegisteredException
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.exeption.UserNotSavedException
 import spock.lang.Specification
@@ -47,6 +48,14 @@ class ExceptionControllerSpec extends Specification {
 
         then: "The response entity contains the exception message"
         assert responseEntity.body["message"] == "The user could not be saved."
+    }
+
+    def "should return a response entity with the exception message for an email already registered"() {
+        when: "The method is called"
+        def responseEntity = exceptionController.handleEmailAlreadyRegisteredException(new EmailAlreadyRegisteredException("email@email.com"))
+
+        then: "The response entity contains the exception message"
+        assert responseEntity.body["message"] == "Email email@email.com is already registered."
     }
 
 }
