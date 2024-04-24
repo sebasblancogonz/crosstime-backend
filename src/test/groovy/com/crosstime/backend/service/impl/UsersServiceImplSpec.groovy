@@ -89,4 +89,31 @@ class UsersServiceImplSpec extends Specification {
         assert result.size() == 0
     }
 
+    def "should return a user by email"() {
+        given: "an expected user to be returned"
+        def expectedUserEntity = new UserEntity(constUuid, "username", "email@email.com", "password", Role.USER)
+
+        when: "the method is called to return the user"
+        def result = usersService.loadUserByUsername("email@email.com")
+
+        then: "the repository is invoked"
+        1 * usersRepository.findByEmail("email@email.com") >> expectedUserEntity
+
+        then: "the returned user is the correct one"
+        assert expectedUserEntity.email == result.username
+    }
+
+    def "shouldn't return a user by email"() {
+        given: "the repository is invoked"
+        1 * usersRepository.findByEmail("email@email.com") >> null
+
+        when: "the method is called to return the user"
+        usersService.loadUserByUsername("email@email.com")
+
+        then: "an exception is thrown"
+        def exception = thrown(UserNotFoundException)
+        assert exception.message == "User with email email@email.com not found."
+    }
+
+
 }

@@ -53,7 +53,7 @@ class LogoutServiceSpec extends Specification {
         logoutService.logout(httpServletRequest, httpServletResponse, authentication)
 
         then: "the bearer token obtained from the request"
-        1 * httpServletRequest.getHeader("Authorization") >> "invalidtoken"
+        1 * httpServletRequest.getHeader("Authorization") >> token
 
         and: "the token is retrieved from the repository"
         0 * tokenRepository.findByToken("token")
