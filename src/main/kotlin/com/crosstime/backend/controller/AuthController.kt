@@ -35,4 +35,9 @@ class AuthController(
         service.refreshToken(request, response)
     }
 
+    @PostMapping("/logout")
+    fun logout(request: HttpServletRequest, response: HttpServletResponse) {
+        service.logout(request, response)
+    }
+
 }

@@ -12,10 +12,12 @@ import com.crosstime.backend.request.RegisterRequest
 import com.crosstime.backend.response.AuthenticationResponse
 import com.crosstime.backend.service.AuthService
 import com.crosstime.backend.service.JwtService
+import com.crosstime.backend.service.LogoutService
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
+import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -29,6 +31,7 @@ class AuthServiceImpl(
     private val usersRepository: UsersRepository,
     private val tokenRepository: TokenRepository,
     private val passwordEncoder: PasswordEncoder,
+    private val logoutService: LogoutService,
     private val usersMapper: UsersMapper,
     private val jwtService: JwtService,
     private val authenticationManager: AuthenticationManager
@@ -76,7 +79,8 @@ class AuthServiceImpl(
 
         val refreshToken = authHeader.substring(7)
         val userEmail = jwtService.extractUsername(refreshToken)
-        val user = checkNotNull(usersRepository.findByEmail(userEmail)) { throw UserNotFoundException(email = userEmail) }
+        val user =
+            checkNotNull(usersRepository.findByEmail(userEmail)) { throw UserNotFoundException(email = userEmail) }
 
         if (jwtService.isTokenValid(refreshToken, user)) {
             val token = jwtService.generateToken(user)
@@ -87,6 +91,10 @@ class AuthServiceImpl(
         } else {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
         }
+    }
+
+    override fun logout(request: HttpServletRequest, response: HttpServletResponse) {
+        logoutService.logout(request, response, null)
     }
 
     private fun saveUserToken(token: String, user: UserEntity) =
