@@ -41,6 +41,7 @@ class ApplicationConfig(
     @Profile("dev")
     fun requestLoggingFilter(): CommonsRequestLoggingFilter {
         val loggingFilter = CommonsRequestLoggingFilter()
+        loggingFilter.setAfterMessagePrefix("Received request [")
         loggingFilter.setIncludeClientInfo(true)
         loggingFilter.setIncludeQueryString(true)
         loggingFilter.setIncludePayload(true)
