@@ -32,6 +32,9 @@ class User(
     @OneToMany(mappedBy = "user")
     var tokens: MutableList<Token> = mutableListOf()
 
+    @OneToMany(mappedBy = "user")
+    var reservations: MutableList<Reservation> = mutableListOf()
+
     override fun getAuthorities(): MutableList<SimpleGrantedAuthority> = role?.getAuthorities() ?: mutableListOf()
     override fun getPassword(): String = pwd!!
     override fun getUsername(): String = email!!
