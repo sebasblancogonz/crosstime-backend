@@ -1,7 +1,7 @@
 ALTER TABLE users ADD role ENUM('admin', 'user') NOT NULL DEFAULT 'user';
 
 -- TOKENS TABLE
-CREATE TABLE tokens (
+CREATE TABLE IF NOT EXISTS tokens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     token VARCHAR(255) NOT NULL,
     token_type ENUM('BEARER') NOT NULL,

@@ -1,4 +1,4 @@
-CREATE TABLE exercises
+CREATE TABLE IF NOT EXISTS exercises
 (
     id               INT AUTO_INCREMENT PRIMARY KEY,
     name             VARCHAR(60),
