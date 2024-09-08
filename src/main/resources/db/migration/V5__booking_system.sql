@@ -1,3 +1,11 @@
+-- Create schedules table
+CREATE TABLE IF NOT EXISTS schedules (
+    id varbinary(36) PRIMARY KEY,
+    day_of_week ENUM('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY') NOT NULL,
+    time_of_day TIME NOT NULL,
+    slot_id varbinary(36)
+);
+
 -- Create slots table
 CREATE TABLE IF NOT EXISTS slots (
     id varbinary(36) PRIMARY KEY,
@@ -22,16 +30,6 @@ CREATE TABLE IF NOT EXISTS reservations (
     CONSTRAINT fk_user
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT fk_slot
-        FOREIGN KEY (slot_id) REFERENCES slots(id) ON DELETE CASCADE
-);
-
--- Create schedules table
-CREATE TABLE IF NOT EXISTS schedules (
-    id varbinary(36) PRIMARY KEY,
-    day_of_week ENUM('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY') NOT NULL,
-    time_of_day TIME NOT NULL,
-    slot_id varbinary(36),
-    CONSTRAINT fk_slot_schedule
         FOREIGN KEY (slot_id) REFERENCES slots(id) ON DELETE CASCADE
 );
 

@@ -4,7 +4,7 @@ import java.util.UUID
 
 class Like(
     var id: UUID? = null,
-    val user: User? = null,
-    val post: Post? = null,
-    val comment: Comment? = null
+    var user: User? = null,
+    var post: Post? = null,
+    var comment: Comment? = null
 )

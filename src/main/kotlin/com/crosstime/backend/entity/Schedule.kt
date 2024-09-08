@@ -26,8 +26,5 @@ class Schedule(
     @Column(name = "day_of_week")
     var dayOfWeek: DayOfWeek? = null,
     @Column(name = "time_of_day")
-    var timeOfDay: LocalTime? = null,
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "slot_id")
-    val slot: Slot? = null
+    var timeOfDay: LocalTime? = null
 )

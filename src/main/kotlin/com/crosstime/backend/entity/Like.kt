@@ -19,11 +19,11 @@ class Like(
     var id: UUID? = null,
     @ManyToOne
     @JoinColumn(name = "user_id")
-    val user: User? = null,
+    var user: User? = null,
     @ManyToOne
     @JoinColumn(name = "post_id")
-    val post: Post? = null,
+    var post: Post? = null,
     @ManyToOne
     @JoinColumn(name = "comment_id")
-    val comment: Comment? = null
+    var comment: Comment? = null
 )
