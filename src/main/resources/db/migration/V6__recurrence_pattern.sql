@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS recurrence_patterns (
+    id varbinary(36) PRIMARY KEY,
+    day_of_week ENUM('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY') NOT NULL,
+    time_of_day TIME NOT NULL,
+    training_type ENUM('FUNCTIONAL', 'WOD', 'WEIGHTLIFTING', 'GYMNASTICS', 'CROSSFIT', 'PILATES', 'YOGA', 'SPINNING', 'BOXING') NOT NULL
+)

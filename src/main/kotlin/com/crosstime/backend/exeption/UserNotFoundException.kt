@@ -3,7 +3,7 @@ package com.crosstime.backend.exeption
 import java.util.UUID
 
 class UserNotFoundException(
-    val userId: UUID? = null,
+    private val userId: UUID? = null,
     val email: String? = null
 ) : RuntimeException() {
     override val message: String

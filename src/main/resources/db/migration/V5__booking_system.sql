@@ -6,8 +6,11 @@ CREATE TABLE IF NOT EXISTS slots (
     duration INT NOT NULL,
     training_type ENUM('FUNCTIONAL', 'WOD', 'WEIGHTLIFTING', 'GYMNASTICS', 'CROSSFIT', 'PILATES', 'YOGA', 'SPINNING', 'BOXING') NOT NULL,
     instructor_id varbinary(36),
+    schedule_id varbinary(36),
     CONSTRAINT fk_instructor
-        FOREIGN KEY (instructor_id) REFERENCES users(id) ON DELETE SET NULL
+        FOREIGN KEY (instructor_id) REFERENCES users(id) ON DELETE SET NULL,
+    CONSTRAINT fk_schedule
+        FOREIGN KEY (schedule_id) REFERENCES schedules(id) ON DELETE SET NULL
 );
 
 -- Create table reservations

@@ -1,6 +1,7 @@
 package com.crosstime.backend.controller
 
 import com.crosstime.backend.exeption.EmailAlreadyRegisteredException
+import com.crosstime.backend.exeption.SlotNotFoundException
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.exeption.UserNotSavedException
 import org.springframework.http.HttpStatus
@@ -18,6 +19,11 @@ class ExceptionController {
 
     @ExceptionHandler(UserNotFoundException::class)
     fun handleUserNotFoundException(exception: UserNotFoundException): ResponseEntity<Map<String, String>> {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, exception.message);
+    }
+
+    @ExceptionHandler(SlotNotFoundException::class)
+    fun handleSlotNotFoundException(exception: SlotNotFoundException): ResponseEntity<Map<String, String>> {
         return buildResponseEntity(HttpStatus.NOT_FOUND, exception.message);
     }
 

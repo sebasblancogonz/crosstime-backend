@@ -34,8 +34,13 @@ class Slot(
     var trainingType: TrainingType? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id")
-    val instructor: User? = null
+    val instructor: User? = null,
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schedule_id")
+    var schedule: Schedule? = null
 ) {
     @OneToMany(mappedBy = "slot")
     var reservations: MutableList<Reservation> = mutableListOf()
+
+    fun isFull() = reservations.size == capacity
 }

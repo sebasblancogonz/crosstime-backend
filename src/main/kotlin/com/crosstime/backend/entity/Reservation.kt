@@ -9,6 +9,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+import java.time.LocalDate
 import java.util.Date
 import java.util.UUID
 
@@ -19,7 +20,7 @@ class Reservation(
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     var id: UUID? = null,
-    @Column(name = "reservation_date") var date: Date? = null,
+    @Column(name = "reservation_date") var date: LocalDate? = null,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User? = null,

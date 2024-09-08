@@ -92,9 +92,8 @@ class AuthServiceImpl(
         }
     }
 
-    override fun logout(request: HttpServletRequest, response: HttpServletResponse) {
+    override fun logout(request: HttpServletRequest, response: HttpServletResponse) =
         logoutService.logout(request, response, null)
-    }
 
     private fun saveUserToken(token: String, user: UserEntity) =
         tokenRepository.save(
