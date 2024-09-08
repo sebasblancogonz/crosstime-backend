@@ -44,7 +44,7 @@ class AuthControllerSpec extends Specification {
 
     def "should return a response entity with the user tokens"() {
         given: "A request to register a user"
-        def registerRequest = new RegisterRequest("test", "test", "test@test.com", Role.USER)
+        def registerRequest = new RegisterRequest("test", "test", "test@test.com", Role.USER, null)
         when: "The method is called"
         def response = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)

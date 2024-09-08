@@ -1,6 +1,8 @@
 package com.crosstime.backend.mapper
 
 import com.crosstime.backend.entity.Role
+import com.crosstime.backend.enums.UserType
+import com.crosstime.backend.model.AuthenticatedUser
 import org.mapstruct.factory.Mappers
 import spock.lang.Specification
 
@@ -17,7 +19,7 @@ class UsersMapperSpec extends Specification {
 
     def "should map a user entity to user model"() {
         given: "a user entity"
-        def userEntity = new UserEntity(UUID.randomUUID(), "Username", "email@email.com", "password", Role.USER)
+        def userEntity = new UserEntity(UUID.randomUUID(), "Username", "email@email.com", "password", Role.USER, UserType.ATHLETE)
 
         when: "the entity to model mapper is invoked"
         def mappedModel = usersMapper.mapToModel(userEntity)
@@ -30,7 +32,7 @@ class UsersMapperSpec extends Specification {
 
     def "should map a user model to a user entity"() {
         given: "a user model"
-        def userModel = new UserModel(UUID.randomUUID(), "Username", "email@email.com", "password", Role.USER)
+        def userModel = new AuthenticatedUser("password", Role.USER, UUID.randomUUID(), "Username", "email@email.com", null)
 
         when: "the entity to model mapper is invoked"
         def mappedEntity = usersMapper.mapToEntity(userModel)
@@ -42,7 +44,7 @@ class UsersMapperSpec extends Specification {
 
     def "should map a user entity list to user model list"() {
         given: "a user entity"
-        def userEntities = [new UserEntity(UUID.randomUUID(), "Username", "email@email.com", "password", Role.USER)]
+        def userEntities = [new UserEntity(UUID.randomUUID(), "Username", "email@email.com", "password", Role.USER, UserType.ATHLETE)]
 
         when: "the entity to model mapper is invoked"
         def mappedModels = usersMapper.mapToModelList(userEntities)
@@ -56,7 +58,7 @@ class UsersMapperSpec extends Specification {
 
     def "should map a user model list to a user entity list"() {
         given: "a user model list"
-        def userModels = [new UserModel(UUID.randomUUID(), "Username", "email@email.com", "password", Role.USER)]
+        def userModels = [new AuthenticatedUser("password", Role.USER, UUID.randomUUID(), "Username", "email@email.com", UserType.ATHLETE)]
 
         when: "the model list to entity list mapper is invoked"
         def mappedEntities = usersMapper.mapToEntityList(userModels)

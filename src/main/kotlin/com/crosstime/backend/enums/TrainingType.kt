@@ -1,4 +1,4 @@
-package com.crosstime.backend.entity
+package com.crosstime.backend.enums
 
 enum class TrainingType {
     FUNCTIONAL,

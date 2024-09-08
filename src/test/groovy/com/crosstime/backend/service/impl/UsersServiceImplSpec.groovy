@@ -2,6 +2,7 @@ package com.crosstime.backend.service.impl
 
 import com.crosstime.backend.entity.Role
 import com.crosstime.backend.entity.User as UserEntity
+import com.crosstime.backend.enums.UserType
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.mapper.UsersMapper
 import com.crosstime.backend.model.User as UserModel
@@ -21,8 +22,8 @@ class UsersServiceImplSpec extends Specification {
 
     def "should return a specific user"() {
         given: "an expected user to be returned"
-        def expectedUserEntity = new UserEntity(constUuid, "username", "email@email.com", "password", Role.USER)
-        def expectedUserModel = new UserModel(constUuid, "username", "email@email.com", "password", Role.USER)
+        def expectedUserEntity = new UserEntity(constUuid, "username", "email@email.com", "password", Role.USER, UserType.ATHLETE)
+        def expectedUserModel = new UserModel(constUuid, "username", "email@email.com")
 
         when: "the method is called to return the user"
         def result = usersService.getUserById(constUuid)
@@ -55,8 +56,8 @@ class UsersServiceImplSpec extends Specification {
 
     def "should return all the users"() {
         given: "an expected list of users to be returned"
-        def expectedUserEntities = [new UserEntity(constUuid, "username", "email@email.com", "password", Role.USER)]
-        def expectedUserModelList = [new UserModel(constUuid, "username", "email@email.com", "password", Role.USER)]
+        def expectedUserEntities = [new UserEntity(constUuid, "username", "email@email.com", "password", Role.USER, UserType.ATHLETE)]
+        def expectedUserModelList = [new UserModel(constUuid, "username", "email@email.com")]
 
         when: "the method is called to return the user"
         def result = usersService.findAllUsers()
@@ -91,7 +92,7 @@ class UsersServiceImplSpec extends Specification {
 
     def "should return a user by email"() {
         given: "an expected user to be returned"
-        def expectedUserEntity = new UserEntity(constUuid, "username", "email@email.com", "password", Role.USER)
+        def expectedUserEntity = new UserEntity(constUuid, "username", "email@email.com", "password", Role.USER, UserType.ATHLETE)
 
         when: "the method is called to return the user"
         def result = usersService.loadUserByUsername("email@email.com")

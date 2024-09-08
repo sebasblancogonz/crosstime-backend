@@ -9,14 +9,16 @@ import com.crosstime.backend.model.User as UserModel
 @Mapper
 interface UsersMapper {
 
+    @Mapping(target = "username", source = "alias")
     fun mapToModel(userEntity: UserEntity): UserModel
 
     @Mapping(target = "alias", source = "username")
     @Mapping(target = "pwd", source = "password")
+    @Mapping(target = "userType", source = "userType", defaultValue = "ATHLETE")
     fun mapToEntity(userModel: AuthenticatedUser): UserEntity
 
     fun mapToModelList(userEntities: List<UserEntity>): List<UserModel>
 
-    fun mapToEntityList(userModels: List<UserModel>): List<UserEntity>
+    fun mapToEntityList(userModels: List<AuthenticatedUser>): List<UserEntity>
 
 }

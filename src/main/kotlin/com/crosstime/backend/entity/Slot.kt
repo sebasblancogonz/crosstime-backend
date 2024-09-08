@@ -1,5 +1,6 @@
 package com.crosstime.backend.entity
 
+import com.crosstime.backend.enums.TrainingType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType

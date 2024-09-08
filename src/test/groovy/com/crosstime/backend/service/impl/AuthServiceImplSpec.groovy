@@ -2,8 +2,9 @@ package com.crosstime.backend.service.impl
 
 import com.crosstime.backend.entity.Role
 import com.crosstime.backend.entity.Token
-import com.crosstime.backend.entity.TokenType
+import com.crosstime.backend.enums.TokenType
 import com.crosstime.backend.entity.User as UserEntity
+import com.crosstime.backend.enums.UserType
 import com.crosstime.backend.exeption.EmailAlreadyRegisteredException
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.mapper.UsersMapper
@@ -12,6 +13,7 @@ import com.crosstime.backend.repository.UsersRepository
 import com.crosstime.backend.request.AuthenticationRequest
 import com.crosstime.backend.request.RegisterRequest
 import com.crosstime.backend.service.JwtService
+import com.crosstime.backend.service.LogoutService
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.ServletOutputStream
 import jakarta.servlet.http.HttpServletRequest
@@ -31,6 +33,7 @@ class AuthServiceImplSpec extends Specification {
     def jwtService = Mock(JwtService)
     def usersMapper = Mock(UsersMapper)
     def authenticationManager = Mock(AuthenticationManager)
+    def logoutService = Mock(LogoutService)
 
     AuthServiceImpl authService
 
@@ -39,6 +42,7 @@ class AuthServiceImplSpec extends Specification {
                 usersRepository,
                 tokenRepository,
                 passwordEncoder,
+                logoutService,
                 usersMapper,
                 jwtService,
                 authenticationManager
@@ -47,8 +51,8 @@ class AuthServiceImplSpec extends Specification {
 
     def "should register a new user"() {
         given: "Register request"
-        def request = new RegisterRequest("test", "test", "test@test.com", Role.USER)
-        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+        def request = new RegisterRequest("test", "test", "test@test.com", Role.USER, null)
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER, UserType.ATHLETE)
 
         and: "the password is encoded"
         1 * passwordEncoder.encode(request.password) >> "test"
@@ -79,8 +83,8 @@ class AuthServiceImplSpec extends Specification {
 
     def "should not register a user with an already registered email"() {
         given: "Register request"
-        def request = new RegisterRequest("test", "test", "test@test.com", Role.USER)
-        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+        def request = new RegisterRequest("test", "test", "test@test.com", Role.USER, null)
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER, UserType.ATHLETE)
 
         and: "the password is encoded"
         1 * passwordEncoder.encode(request.password) >> "test"
@@ -98,7 +102,7 @@ class AuthServiceImplSpec extends Specification {
     def "should authenticate a user"() {
         given: "an authentication request"
         def authenticationRequest = new AuthenticationRequest("test@test.com", "test")
-        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER, UserType.ATHLETE)
 
         and: "the authentication manager authenticates the user"
         1 * authenticationManager.authenticate(_)
@@ -130,7 +134,7 @@ class AuthServiceImplSpec extends Specification {
     def "should authenticate a user"() {
         given: "an authentication request"
         def authenticationRequest = new AuthenticationRequest("test@test.com", "test")
-        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER, UserType.ATHLETE)
 
         and: "the user exists in the database"
         1 * usersRepository.findByEmail(authenticationRequest.email) >> null
@@ -156,7 +160,7 @@ class AuthServiceImplSpec extends Specification {
         1 * jwtService.extractUsername("token") >> "email@email.com"
 
         and: "the user exists in the database"
-        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER, UserType.ATHLETE)
         1 * usersRepository.findByEmail("email@email.com") >> userEntity
 
         and: "the token is a valid one"
@@ -199,7 +203,7 @@ class AuthServiceImplSpec extends Specification {
         1 * jwtService.extractUsername("token") >> "email@email.com"
 
         and: "the user exists in the database"
-        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER, UserType.ATHLETE)
         1 * usersRepository.findByEmail("email@email.com") >> userEntity
 
         and: "the token is a not a valid one"

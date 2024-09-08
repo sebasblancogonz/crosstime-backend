@@ -1,7 +1,7 @@
 package com.crosstime.backend.service.impl
 
 import com.crosstime.backend.entity.Token
-import com.crosstime.backend.entity.TokenType
+import com.crosstime.backend.enums.TokenType
 import com.crosstime.backend.exeption.EmailAlreadyRegisteredException
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.mapper.UsersMapper
@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpHeaders
-import org.springframework.security.authentication.AnonymousAuthenticationToken
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder

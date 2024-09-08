@@ -1,5 +1,6 @@
 package com.crosstime.backend.entity
 
+import com.crosstime.backend.enums.UserType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -26,7 +27,10 @@ class User(
     @Column(name = "password") var pwd: String? = null,
     @Enumerated(EnumType.STRING) @Column(name = "role")
     @ColumnTransformer(read = "UPPER(role)", write = "UPPER(?)")
-    var role: Role? = null
+    var role: Role? = null,
+    @Enumerated(EnumType.STRING) @Column(name = "user_type")
+    @ColumnTransformer(read = "UPPER(user_type)", write = "UPPER(?)")
+    var userType: UserType? = null
 ) : UserDetails {
 
     @OneToMany(mappedBy = "user")

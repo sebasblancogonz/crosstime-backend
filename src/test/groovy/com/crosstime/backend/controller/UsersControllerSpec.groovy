@@ -1,6 +1,8 @@
 package com.crosstime.backend.controller
 
 import com.crosstime.backend.entity.Role
+import com.crosstime.backend.enums.UserType
+import com.crosstime.backend.model.AuthenticatedUser
 import com.crosstime.backend.model.User
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -35,7 +37,7 @@ class UsersControllerSpec extends Specification {
 
     def "should retrieve a user given an ID"() {
         given: "A created user"
-        def expectedUser = new User(UUID.fromString(A_UUID), "Username", "email@email.com", "\$2a\$10\$edNFyg9/dWIJ4a.X3Vo6A.4wS3k.1.iQ7b6ysm2NkJ8hSdWWocBCu", Role.USER)
+        def expectedUser = new AuthenticatedUser("\$2a\$10\$edNFyg9/dWIJ4a.X3Vo6A.4wS3k.1.iQ7b6ysm2NkJ8hSdWWocBCu", Role.USER, UUID.fromString(A_UUID), "Username", "email@email.com", UserType.ATHLETE)
         when: "The get user by id endpoint is called"
         def response = mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/users/{userId}", A_UUID)
@@ -53,7 +55,7 @@ class UsersControllerSpec extends Specification {
 
     def "should retrieve a list of users"() {
         given: "A created user"
-        def expectedUser = [new User(UUID.fromString(A_UUID), "Username", "email@email.com", "\$2a\$10\$edNFyg9/dWIJ4a.X3Vo6A.4wS3k.1.iQ7b6ysm2NkJ8hSdWWocBCu", Role.USER)]
+        def expectedUser = [new AuthenticatedUser("\$2a\$10\$edNFyg9/dWIJ4a.X3Vo6A.4wS3k.1.iQ7b6ysm2NkJ8hSdWWocBCu", Role.USER, UUID.fromString(A_UUID), "Username", "email@email.com", UserType.ATHLETE)]
 
         when: "The get user by id endpoint is called"
         def response = mockMvc.perform(MockMvcRequestBuilders.get("/api/users")

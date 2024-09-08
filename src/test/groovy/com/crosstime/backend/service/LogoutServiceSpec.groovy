@@ -1,7 +1,7 @@
 package com.crosstime.backend.service
 
 import com.crosstime.backend.entity.Token
-import com.crosstime.backend.entity.TokenType
+import com.crosstime.backend.enums.TokenType
 import com.crosstime.backend.entity.User
 import com.crosstime.backend.repository.TokenRepository
 import jakarta.servlet.http.HttpServletRequest

@@ -2,6 +2,7 @@ package com.crosstime.backend.service.impl
 
 import com.crosstime.backend.entity.Role
 import com.crosstime.backend.entity.User as UserEntity
+import com.crosstime.backend.enums.UserType
 import spock.lang.Specification
 
 class JwtServiceImplSpec extends Specification {
@@ -24,7 +25,7 @@ class JwtServiceImplSpec extends Specification {
 
     def "should return a jwt token"() {
         given: "A user entity"
-        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER, UserType.ATHLETE)
 
         when: "The method is called"
         def token = jwtService.generateToken(new HashMap(), userEntity)
@@ -35,7 +36,7 @@ class JwtServiceImplSpec extends Specification {
 
     def "should return a jwt token"() {
         given: "A user entity"
-        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER, UserType.ATHLETE)
 
         when: "The method is called"
         def token = jwtService.generateToken(userEntity)
@@ -46,7 +47,7 @@ class JwtServiceImplSpec extends Specification {
 
     def "should refresh a jwt token"() {
         given: "A user entity"
-        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER)
+        def userEntity = new UserEntity(UUID.randomUUID(), "test", "test@test.com", "test", Role.USER, UserType.ATHLETE)
 
         when: "The method is called"
         def token = jwtService.generateRefreshToken(userEntity)
