@@ -8,23 +8,23 @@ import com.crosstime.backend.repository.ReservationRepository
 import com.crosstime.backend.repository.SlotRepository
 import com.crosstime.backend.repository.UsersRepository
 import com.crosstime.backend.request.ReservationRequest
+import com.crosstime.backend.service.ReservationService
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.util.UUID
 
 @Service
 class ReservationServiceImpl(
     val reservationRepository: ReservationRepository,
     val usersRepository: UsersRepository,
     val slotRepository: SlotRepository
-) {
+): ReservationService {
 
-    fun createReservation(request: ReservationRequest) {
-        val slot = slotRepository.findById(request.slotId).orElseThrow {
-            throw SlotNotFoundException(request.slotId)
+    override fun createReservation(reservationRequest: ReservationRequest) {
+        val slot = slotRepository.findById(reservationRequest.slotId).orElseThrow {
+            throw SlotNotFoundException(reservationRequest.slotId)
         }
 
-        val user = usersRepository.findById(request.userId).orElseThrow {
+        val user = usersRepository.findById(reservationRequest.userId).orElseThrow {
             throw UserNotFoundException()
         }
 

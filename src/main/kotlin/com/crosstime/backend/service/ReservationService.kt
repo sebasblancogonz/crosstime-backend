@@ -5,6 +5,6 @@ import java.util.UUID
 
 interface ReservationService {
 
-    fun reserveSlot(reservationRequest: ReservationRequest)
+    fun createReservation(reservationRequest: ReservationRequest)
 
 }

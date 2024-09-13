@@ -17,7 +17,7 @@ class UsersServiceImpl(
     val usersMapper: UsersMapper
 ) : UsersService, UserDetailsService {
 
-    override fun getUserById(userId: UUID): User? {
+    override fun getUserById(userId: UUID): User {
         val userEntity = usersRepository.findById(userId)
         return usersMapper.mapToModel(userEntity.getOrElse { throw UserNotFoundException(userId) })
     }

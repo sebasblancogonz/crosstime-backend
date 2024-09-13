@@ -5,7 +5,8 @@ import java.util.UUID
 
 interface UsersService {
 
-    fun getUserById(userId: UUID): User?
+    fun getUserById(userId: UUID): User
+
     fun findAllUsers(): List<User>
 
 }
