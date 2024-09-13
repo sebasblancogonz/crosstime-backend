@@ -2,6 +2,8 @@ package com.crosstime.backend.controller
 
 
 import com.crosstime.backend.exeption.EmailAlreadyRegisteredException
+import com.crosstime.backend.exeption.SlotAlreadyReservedException
+import com.crosstime.backend.exeption.SlotNotFoundException
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.exeption.UserNotSavedException
 import spock.lang.Specification
@@ -56,6 +58,22 @@ class ExceptionControllerSpec extends Specification {
 
         then: "The response entity contains the exception message"
         assert responseEntity.body["message"] == "Email email@email.com is already registered."
+    }
+
+    def "should return a response entity with the exception message for a slot already reserved"() {
+        when: "The method is called"
+        def responseEntity = exceptionController.handleSlotAlreadyReservedException(new SlotAlreadyReservedException())
+
+        then: "The response entity contains the exception message"
+        assert responseEntity.body["message"] == "Slot cannot be reserved twice by the same user."
+    }
+
+    def "should return a response entity with the exception message for a not found slot"() {
+        when: "The method is called"
+        def responseEntity = exceptionController.handleSlotNotFoundException(new SlotNotFoundException())
+
+        then: "The response entity contains the exception message"
+        assert responseEntity.body["message"] == "Slot not found."
     }
 
 }
