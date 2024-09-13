@@ -43,4 +43,7 @@ class Slot(
     var reservations: MutableList<Reservation> = mutableListOf()
 
     fun isFull() = reservations.size == capacity
+
+    fun slotAlreadyReservedByUser(userId: UUID) =
+        reservations.any { it.user?.id == userId }
 }

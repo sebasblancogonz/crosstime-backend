@@ -1,6 +1,7 @@
 package com.crosstime.backend.controller
 
 import com.crosstime.backend.exeption.EmailAlreadyRegisteredException
+import com.crosstime.backend.exeption.SlotAlreadyReservedException
 import com.crosstime.backend.exeption.SlotNotFoundException
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.exeption.UserNotSavedException
@@ -25,6 +26,11 @@ class ExceptionController {
     @ExceptionHandler(SlotNotFoundException::class)
     fun handleSlotNotFoundException(exception: SlotNotFoundException): ResponseEntity<Map<String, String>> {
         return buildResponseEntity(HttpStatus.NOT_FOUND, exception.message);
+    }
+
+    @ExceptionHandler(SlotAlreadyReservedException::class)
+    fun handleSlotAlreadyReservedException(exception: SlotAlreadyReservedException): ResponseEntity<Map<String, String>> {
+        return buildResponseEntity(HttpStatus.FORBIDDEN, exception.message);
     }
 
     @ExceptionHandler(EmailAlreadyRegisteredException::class)

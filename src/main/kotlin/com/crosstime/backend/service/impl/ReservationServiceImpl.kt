@@ -2,6 +2,7 @@ package com.crosstime.backend.service.impl
 
 import com.crosstime.backend.entity.Reservation
 import com.crosstime.backend.exeption.FullSlotException
+import com.crosstime.backend.exeption.SlotAlreadyReservedException
 import com.crosstime.backend.exeption.SlotNotFoundException
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.repository.ReservationRepository
@@ -29,6 +30,7 @@ class ReservationServiceImpl(
         }
 
         if (slot.isFull()) throw FullSlotException()
+        if (slot.slotAlreadyReservedByUser(user.id!!)) throw SlotAlreadyReservedException()
 
         val reservation = Reservation(date = LocalDate.now(), user = user, slot = slot)
 
