@@ -11,4 +11,6 @@ interface SlotService {
 
     fun findSlotById(id: UUID): Slot
 
+    fun createSlot(slot: Slot)
+
 }

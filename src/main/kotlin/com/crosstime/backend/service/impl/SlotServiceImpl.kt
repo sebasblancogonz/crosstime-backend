@@ -29,4 +29,8 @@ class SlotServiceImpl(
             throw SlotNotFoundException(id)
         }
     }
+
+    override fun createSlot(slot: Slot) {
+        slotRepository.save(slotMapper.mapModelToEntity(slot))
+    }
 }
