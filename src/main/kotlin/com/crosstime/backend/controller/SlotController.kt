@@ -34,4 +34,9 @@ class SlotController(
         return ResponseEntity.ok().build()
     }
 
+    @GetMapping
+    fun getAllSlots(): ResponseEntity<List<Slot>> {
+        return ResponseEntity.ok(slotService.findAllSlots())
+    }
+
 }

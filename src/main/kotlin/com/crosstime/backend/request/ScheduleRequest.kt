@@ -1,11 +1,10 @@
-package com.crosstime.backend.model
+package com.crosstime.backend.request
 
+import com.crosstime.backend.model.Slot
 import java.time.DayOfWeek
 import java.time.LocalTime
-import java.util.UUID
 
-class Schedule(
-    val id: UUID? = null,
+data class ScheduleRequest(
     val dayOfWeek: DayOfWeek,
     val timeOfDay: LocalTime
 )
