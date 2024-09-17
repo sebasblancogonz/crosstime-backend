@@ -7,7 +7,7 @@ import org.mapstruct.Mapper
 @Mapper
 interface ScheduleMapper {
 
-    fun mapEntityToModel(scheduleEntity: ScheduleEntity)
+    fun mapEntityToModel(scheduleEntity: ScheduleEntity): ScheduleEntity
 
     fun mapEntitiesToModels(scheduleEntities: List<ScheduleEntity>): List<ScheduleModel>
 

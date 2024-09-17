@@ -1,6 +1,6 @@
 package com.crosstime.backend.model
 
-import java.time.DayOfWeek
+import com.crosstime.backend.enums.DayOfWeek
 import java.time.LocalTime
 import java.util.UUID
 
