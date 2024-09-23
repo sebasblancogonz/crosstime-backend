@@ -10,4 +10,6 @@ interface ReservationRepository : JpaRepository<Reservation, UUID> {
 
     fun findByUserId(userId: UUID): List<Reservation>
 
+    fun findBySlotId(slotId: UUID): List<Reservation>
+
 }

@@ -29,4 +29,8 @@ class ReservationController (
     fun getReservationsByUserId(@PathVariable userId: String): ResponseEntity<List<Reservation>> =
         ResponseEntity.ok(reservationService.getReservationsByUserId(UUID.fromString(userId)))
 
+    @GetMapping("/slot-id/{slotId}")
+    fun getReservationsBySlotId(@PathVariable slotId: String): ResponseEntity<List<Reservation>> =
+        ResponseEntity.ok(reservationService.getReservationsBySlotId(UUID.fromString(slotId)))
+
 }

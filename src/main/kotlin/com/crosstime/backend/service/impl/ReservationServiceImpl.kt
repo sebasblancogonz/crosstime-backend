@@ -5,6 +5,7 @@ import com.crosstime.backend.exeption.SlotAlreadyReservedException
 import com.crosstime.backend.exeption.SlotNotFoundException
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.mapper.ReservationMapper
+import com.crosstime.backend.model.Reservation
 import com.crosstime.backend.repository.ReservationRepository
 import com.crosstime.backend.repository.SlotRepository
 import com.crosstime.backend.repository.UsersRepository
@@ -43,5 +44,8 @@ class ReservationServiceImpl(
 
     override fun getReservationsByUserId(userId: UUID): List<ReservationModel> =
         reservationMapper.mapEntitiesToModels(reservationRepository.findByUserId(userId))
+
+    override fun getReservationsBySlotId(slotId: UUID): List<Reservation> =
+        reservationMapper.mapEntitiesToModels(reservationRepository.findBySlotId(slotId))
 
 }

@@ -65,14 +65,12 @@ class JwtServiceImpl(
         .signWith(signInKey, SignatureAlgorithm.HS256)
         .compact()
 
-    private fun extractAllClaims(token: String?): Claims {
-        return Jwts
+    private fun extractAllClaims(token: String?): Claims = Jwts
             .parserBuilder()
             .setSigningKey(signInKey)
             .build()
             .parseClaimsJws(token)
             .body
-    }
 
     private val signInKey: Key
         get() {

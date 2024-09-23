@@ -10,4 +10,6 @@ interface ReservationService {
 
     fun getReservationsByUserId(userId: UUID): List<Reservation>
 
+    fun getReservationsBySlotId(slotId: UUID): List<Reservation>
+
 }

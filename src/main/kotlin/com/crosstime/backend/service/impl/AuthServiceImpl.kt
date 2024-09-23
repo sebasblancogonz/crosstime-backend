@@ -48,7 +48,7 @@ class AuthServiceImpl(
         val refreshToken = jwtService.generateRefreshToken(userEntity)
         saveUserToken(token, savedUser)
 
-        return AuthenticationResponse(accessToken = token, refreshToken = refreshToken)
+        return AuthenticationResponse(accessToken = token, refreshToken = refreshToken, userId = savedUser.id!!)
     }
 
     override fun authenticate(request: AuthenticationRequest): AuthenticationResponse {
@@ -65,7 +65,7 @@ class AuthServiceImpl(
         val refreshToken = jwtService.generateRefreshToken(user)
         revokeAllUserTokens(user)
         saveUserToken(jwtToken, user)
-        return AuthenticationResponse(accessToken = jwtToken, refreshToken = refreshToken)
+        return AuthenticationResponse(accessToken = jwtToken, refreshToken = refreshToken, userId = user.id!!)
     }
 
     @Throws(IOException::class)
@@ -85,7 +85,7 @@ class AuthServiceImpl(
             val token = jwtService.generateToken(user)
             revokeAllUserTokens(user)
             saveUserToken(token, user)
-            val authResponse = AuthenticationResponse(accessToken = token, refreshToken = refreshToken)
+            val authResponse = AuthenticationResponse(accessToken = token, refreshToken = refreshToken, userId = user.id!!)
             ObjectMapper().writeValue(response.outputStream, authResponse)
         } else {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
