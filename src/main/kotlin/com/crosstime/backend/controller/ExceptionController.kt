@@ -1,6 +1,7 @@
 package com.crosstime.backend.controller
 
 import com.crosstime.backend.exeption.EmailAlreadyRegisteredException
+import com.crosstime.backend.exeption.FullSlotException
 import com.crosstime.backend.exeption.SlotAlreadyReservedException
 import com.crosstime.backend.exeption.SlotNotFoundException
 import com.crosstime.backend.exeption.UserNotFoundException
@@ -36,6 +37,11 @@ class ExceptionController {
     @ExceptionHandler(EmailAlreadyRegisteredException::class)
     fun handleEmailAlreadyRegisteredException(exception: EmailAlreadyRegisteredException): ResponseEntity<Map<String, String>> {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, exception.message);
+    }
+
+    @ExceptionHandler(FullSlotException::class)
+    fun handleFullSlotException(exception: FullSlotException): ResponseEntity<Map<String, String>> {
+        return buildResponseEntity(HttpStatus.FORBIDDEN, exception.message);
     }
 
     private fun buildResponseEntity(status: HttpStatus, message: String): ResponseEntity<Map<String, String>> {

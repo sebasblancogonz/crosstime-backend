@@ -4,18 +4,11 @@ import com.crosstime.backend.entity.Role
 import com.crosstime.backend.request.AuthenticationRequest
 import com.crosstime.backend.request.RegisterRequest
 import com.crosstime.backend.response.AuthenticationResponse
-import com.crosstime.backend.service.AuthService
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.h2.engine.Mode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.context.annotation.Bean
 import org.springframework.http.MediaType
-import org.springframework.jdbc.datasource.DriverManagerDataSource
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
@@ -24,16 +17,17 @@ import spock.lang.Narrative
 import spock.lang.Specification
 import spock.lang.Title
 
-import javax.sql.DataSource
+import static com.crosstime.backend.utils.ScriptPathConstants.CLEAN_TOKENS
+import static com.crosstime.backend.utils.ScriptPathConstants.CLEAN_USERS
+import static com.crosstime.backend.utils.ScriptPathConstants.INIT_TOKENS
+import static com.crosstime.backend.utils.ScriptPathConstants.INIT_USERS
 
 @Title("The auth controller test class")
 @Narrative("This class will test only the happy path for each rest operation over the auth api")
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "/db/users/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/db/tokens/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/db/tokens/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@Sql(scripts = "/db/users/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = [INIT_USERS, INIT_TOKENS], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = [CLEAN_TOKENS, CLEAN_USERS], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 class AuthControllerSpec extends Specification {
 
     @Autowired

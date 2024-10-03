@@ -20,7 +20,7 @@ class ReservationController (
 ) {
 
     @PostMapping("/create")
-    fun createReservation(@RequestBody request: ReservationRequest): ResponseEntity<Void> {
+    fun createReservation(@RequestBody request: ReservationRequest): ResponseEntity<Unit> {
         reservationService.createReservation(request)
         return ResponseEntity.ok().build()
     }

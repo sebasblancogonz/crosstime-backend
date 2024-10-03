@@ -17,12 +17,15 @@ import spock.lang.Narrative
 import spock.lang.Specification
 import spock.lang.Title
 
+import static com.crosstime.backend.utils.ScriptPathConstants.CLEAN_TOKENS
+import static com.crosstime.backend.utils.ScriptPathConstants.CLEAN_USERS
+import static com.crosstime.backend.utils.ScriptPathConstants.INIT_TOKENS
+import static com.crosstime.backend.utils.ScriptPathConstants.INIT_USERS
+
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql(scripts = "/db/users/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/db/tokens/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = "/db/tokens/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-@Sql(scripts = "/db/users/clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = [INIT_USERS, INIT_TOKENS], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = [CLEAN_TOKENS, CLEAN_USERS], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Title("The users controller test class")
 @Narrative("This class will test only the happy path for each rest operation over the users api")
 class UsersControllerSpec extends Specification {

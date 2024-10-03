@@ -17,7 +17,7 @@ class ScheduleController(
 ) {
 
     @PostMapping("/create")
-    fun createSchedule(@RequestBody request: ScheduleRequest): ResponseEntity<Void> {
+    fun createSchedule(@RequestBody request: ScheduleRequest): ResponseEntity<Unit> {
         scheduleService.addSchedule(request)
         return ResponseEntity.ok().build()
     }
