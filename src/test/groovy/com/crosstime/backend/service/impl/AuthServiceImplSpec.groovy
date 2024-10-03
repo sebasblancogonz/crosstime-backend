@@ -275,4 +275,16 @@ class AuthServiceImplSpec extends Specification {
         assert exception.cause.message == "error"
     }
 
+    def "should logout a user"() {
+        given: "an httpServletRequest"
+        def httpServletRequest = Mock(HttpServletRequest)
+        def httpServletResponse = Mock(HttpServletResponse)
+
+        when: "The method is called"
+        authService.logout(httpServletRequest, httpServletResponse)
+
+        then: "the logout service is called"
+        1 * logoutService.logout(httpServletRequest, httpServletResponse, null) >> {}
+    }
+
 }

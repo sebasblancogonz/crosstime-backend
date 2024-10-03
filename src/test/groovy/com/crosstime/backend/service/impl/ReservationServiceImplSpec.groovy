@@ -5,6 +5,8 @@ import com.crosstime.backend.entity.Schedule
 import com.crosstime.backend.enums.DayOfWeek
 import com.crosstime.backend.enums.TrainingType
 import com.crosstime.backend.enums.UserType
+import com.crosstime.backend.exeption.FullSlotException
+import com.crosstime.backend.exeption.SlotAlreadyReservedException
 import com.crosstime.backend.exeption.SlotNotFoundException
 import com.crosstime.backend.exeption.UserNotFoundException
 import com.crosstime.backend.mapper.ReservationMapper
@@ -106,7 +108,7 @@ class ReservationServiceImplSpec extends Specification {
         result == [expectedModel]
     }
 
-def "should return reservations for a given slot"() {
+    def "should return reservations for a given slot"() {
         given: "a slot"
         def id = UUID.randomUUID()
         def expected = buildReservationEntity()
@@ -123,6 +125,60 @@ def "should return reservations for a given slot"() {
 
         then: "the returned reservations are the correct ones"
         result == [expectedModel]
+    }
+
+    def "should throw an exception when the slot is full"() {
+        given: "a reservation request and a slot"
+        def id = UUID.randomUUID()
+        def reservationRequest = new ReservationRequest(id, id)
+        def slotMock = Mock(SlotEntity)
+        def userMock = Mock(UserEntity)
+
+        and: "the slot is full"
+        slotMock.isFull() >> true
+
+        when: "the method is called to create a reservation"
+        reservationService.createReservation(reservationRequest)
+
+        then: "the repository is called to find the slot"
+        1 * slotRepository.findById(id) >> Optional.of(slotMock)
+
+        then: "the repository is called to find the user"
+        1 * usersRepository.findById(id) >> Optional.of(userMock)
+
+        and: "an exception is thrown due to full slot"
+        def exception = thrown(FullSlotException)
+        exception.message == "Could not create reservation. Slot is full."
+    }
+
+    def "should throw an exception if the user has already reserved the slot"() {
+        given: "a reservation request and a slot"
+        def id = UUID.randomUUID()
+        def reservationRequest = new ReservationRequest(id, id)
+        def slotMock = Mock(SlotEntity)
+        def userMock = Mock(UserEntity)
+
+        and: "the slot is not full"
+        slotMock.isFull() >> false
+
+        and: "a user id"
+        userMock.getId() >> id
+
+        and: "the user has already reserved the slot"
+        slotMock.slotAlreadyReservedByUser(id) >> true
+
+        when: "the method is called to create a reservation"
+        reservationService.createReservation(reservationRequest)
+
+        then: "the repository is called to find the slot"
+        1 * slotRepository.findById(id) >> Optional.of(slotMock)
+
+        then: "the repository is called to find the user"
+        1 * usersRepository.findById(id) >> Optional.of(userMock)
+
+        and: "an exception is thrown due to full slot"
+        def exception = thrown(SlotAlreadyReservedException)
+        exception.message == "Slot cannot be reserved twice by the same user."
     }
 
     def buildReservationEntity() {

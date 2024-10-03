@@ -79,4 +79,13 @@ class AuthControllerSpec extends Specification {
                 .andExpect(MockMvcResultMatchers.status().isOk())
     }
 
+    def "should logout the user"() {
+        given: "A request to logout the user"
+        expect: "The method is called and returns 200 OK"
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/auth/logout")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("authorization", "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjk5OTk5OTk5OTk5OTk5LCJleHAiOjk5OTk5OTk5OTk5OTk5fQ.f2KMM65Zqq4urAVBER31Mqa3gk4W9XfCB1sJASg_0pE"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+    }
+
 }
