@@ -12,4 +12,6 @@ interface ReservationService {
 
     fun getReservationsBySlotId(slotId: UUID): List<Reservation>
 
+    fun deleteReservation(reservationId: UUID)
+
 }

@@ -23,7 +23,7 @@ class ReservationServiceImpl(
     val reservationMapper: ReservationMapper,
     val usersRepository: UsersRepository,
     val slotRepository: SlotRepository
-): ReservationService {
+) : ReservationService {
 
     override fun createReservation(reservationRequest: ReservationRequest) {
         val slot = slotRepository.findById(reservationRequest.slotId).orElseThrow {
@@ -47,5 +47,7 @@ class ReservationServiceImpl(
 
     override fun getReservationsBySlotId(slotId: UUID): List<Reservation> =
         reservationMapper.mapEntitiesToModels(reservationRepository.findBySlotId(slotId))
+
+    override fun deleteReservation(reservationId: UUID): Unit = reservationRepository.deleteById(reservationId)
 
 }

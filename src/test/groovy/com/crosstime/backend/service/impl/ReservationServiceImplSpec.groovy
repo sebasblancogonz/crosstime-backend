@@ -181,6 +181,17 @@ class ReservationServiceImplSpec extends Specification {
         exception.message == "Slot cannot be reserved twice by the same user."
     }
 
+    def "should delete a reservation"() {
+        given: "a reservation"
+        def id = UUID.randomUUID()
+        
+        when: "the method is called to delete a reservation"
+        reservationService.deleteReservation(id)
+
+        then: "the repository is invoked"
+        1 * reservationRepository.deleteById(id) >> { }
+    }
+
     def buildReservationEntity() {
         return new ReservationEntity(UUID.randomUUID(), LocalDate.parse("2019-01-01"), buildUserEntity(), buildSlotEntity())
     }

@@ -90,5 +90,15 @@ class ReservationControllerSpec extends Specification {
         assert reservation[0].id == UUID.fromString("5fcab368-b148-41fe-a0ee-91fb6b5a63ee")
     }
 
+    def "should delete a reservation"() {
+        given: "A request to delete a reservation"
+        when: "The delete reservation endpoint is called"
+        def response = mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations/delete/{id}", "5fcab368-b148-41fe-a0ee-91fb6b5a63ee")
+                .header("authorization", "Bearer " + "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbWFpbEBlbWFpbC5jb20iLCJpYXQiOjk5OTk5OTk5OTk5OTk5LCJleHAiOjk5OTk5OTk5OTk5OTk5fQ.f2KMM65Zqq4urAVBER31Mqa3gk4W9XfCB1sJASg_0pE"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+
+        then: "The reservation is deleted"
+        assert reservationRepository.findById(UUID.fromString("5fcab368-b148-41fe-a0ee-91fb6b5a63ee")).isEmpty()
+    }
 
 }
